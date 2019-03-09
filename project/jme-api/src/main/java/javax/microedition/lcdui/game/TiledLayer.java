@@ -67,7 +67,7 @@ public class TiledLayer extends Layer
 		tiles = new int[colsw][rowsh];
 	}
 
-	int createAnimatedTile(int staticTileIndex)
+	protected int createAnimatedTile(int staticTileIndex)
 	{
 		animatedTileCount++;
 		animatedTiles[animatedTileCount] = staticTileIndex;
