@@ -44,7 +44,7 @@ public abstract class MIDlet
 		return -1;
 	}
 
-	protected abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
+	public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
 
 	public String getAppProperty(String key)
 	{ 
@@ -64,13 +64,13 @@ public abstract class MIDlet
 
 	public final void notifyPaused() { }
 
-	protected abstract void pauseApp();
+	public abstract void pauseApp();
 
 	public final boolean platformRequest(String URL) { return false; }
 
 	public final void resumeRequest() { }
 
-	protected abstract void startApp() throws MIDletStateChangeException;
+	public abstract void startApp() throws MIDletStateChangeException;
 
 	public Display getDisplay() { return display; }
 

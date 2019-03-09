@@ -28,21 +28,21 @@ public class Connector
 	public static final int READ_WRITE = 3;
 	public static final int WRITE = 2;
 
-/*
 
-	public static Connection open(String name) {  }
 
-	public static Connection open(String name, int mode) {  }
+	public static Connection open(String name) {  return null; }
 
-	public static Connection open(String name, int mode, boolean timeouts) {  }
+	public static Connection open(String name, int mode) { return null;  }
 
-	public static DataInputStream openDataInputStream(String name) {  }
+	public static Connection open(String name, int mode, boolean timeouts) { return null;  }
 
-	public static DataOutputStream openDataOutputStream(String name) {  }
+	public static DataInputStream openDataInputStream(String name) { return null;  }
 
-	public static InputStream openInputStream(String name) {  }
+	public static DataOutputStream openDataOutputStream(String name) { return null;  }
 
-	public static OutputStream openOutputStream(String name) {  }
-*/
+	public static InputStream openInputStream(String name) { return null;  }
+
+	public static OutputStream openOutputStream(String name) { return null;  }
+
 
 }

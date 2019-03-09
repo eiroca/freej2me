@@ -68,7 +68,7 @@ public class RecordStore
 
 		name = recordStoreName;
 
-		appname = Mobile.getPlatform().loader.suitename;
+		appname = Mobile.getPlatform().loader.getSuiteName();
 
 		rmsPath = "rms/"+appname;
 		rmsFile = "rms/"+appname+"/"+recordStoreName;
@@ -247,7 +247,7 @@ public class RecordStore
 	{
 		try
 		{
-			File fstore = new File("rms/"+Mobile.getPlatform().loader.suitename+"/"+recordStoreName);
+			File fstore = new File("rms/"+Mobile.getPlatform().loader.getSuiteName()+"/"+recordStoreName);
 			fstore.delete();
 		}
 		catch (Exception e)
@@ -350,7 +350,7 @@ public class RecordStore
 		//System.out.println("List Record Stores");
 		if(rmsPath==null)
 		{
-			rmsPath = "rms/"+Mobile.getPlatform().loader.name;
+			rmsPath = "rms/"+Mobile.getPlatform().loader.getName();
 			try
 			{
 				Files.createDirectories(Paths.get(rmsPath));

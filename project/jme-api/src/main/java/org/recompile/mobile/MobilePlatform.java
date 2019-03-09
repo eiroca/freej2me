@@ -1,5 +1,5 @@
 /*
-	This file is part of FreeJ2ME.
+  	This file is part of FreeJ2ME.
 
 	FreeJ2ME is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.game.GameCanvas;
 import javax.microedition.lcdui.Image;
 import javax.microedition.m3g.Graphics3D;
+import javax.microedition.midlet.MIDletStateChangeException;
+
 
 import java.awt.image.BufferedImage;
 
@@ -152,7 +154,7 @@ public class MobilePlatform
 		try
 		{
 			URL jar = new URL(jarurl);
-			loader = new MIDletLoader(new URL[]{jar});
+			loader = new JARLoader(new URL[]{jar});
 			return true;
 		}
 		catch (Exception e)
@@ -197,6 +199,16 @@ public class MobilePlatform
 		painter.run();
 
 		//System.gc();
+	}
+
+	public boolean init(Class<?> midletClass) {
+		loader = new InternalLoader(midletClass);
+		return true;
+	}
+
+	public void run() throws MIDletStateChangeException {
+		loader.start();
+		
 	}
 
 }
