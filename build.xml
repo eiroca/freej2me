@@ -10,15 +10,9 @@
 
 	<echo message="FreeJ2ME - AWT | JavaFx | Libretro | SDL" />
 	<mkdir dir="build/classes"/>
-	<javac
-		srcdir="src"
-		destdir="build/classes"
-		includeantruntime="false"
-		debug="true"
-		debuglevel="lines,vars,source"
-	>
-	<compilerarg value="-Xlint:unchecked"/>
-	<compilerarg value="-Xlint:deprecation"/>
+	<javac srcdir="project/jme-emulator/src/main/java" destdir="build/classes" includeantruntime="false" debug="true" debuglevel="lines,vars,source" >  
+		<compilerarg value="-Xlint:unchecked"/>
+		<compilerarg value="-Xlint:deprecation"/>
 	</javac>
 
 
