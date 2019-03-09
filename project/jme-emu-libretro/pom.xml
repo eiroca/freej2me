@@ -20,10 +20,5 @@
 			<artifactId>jme-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>net.eiroca</groupId>
-			<artifactId>jme-emulator</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 </project>
