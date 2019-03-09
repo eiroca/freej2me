@@ -95,7 +95,10 @@
 	<modules>
 		<module>jme-api</module>
 		<module>jme-core</module>
-		<module>jme-emulator</module>
 		<module>jme-embedded</module>
+		<module>jme-emulator</module>
+		<module>jme-emu-javafx</module>
+		<module>jme-emu-libretro</module>
+		<module>jme-emu-retropie</module>
 	</modules>
 </project>
