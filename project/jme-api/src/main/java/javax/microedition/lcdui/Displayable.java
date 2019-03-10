@@ -150,15 +150,18 @@ public abstract class Displayable
 					gc.fillRect(0,y,width,15);
 					gc.setColor(0xFFFFFF);
 				}
-				gc.drawString(items.get(i).getLabel(), width/2, y, Graphics.HCENTER);
-				if(items.get(i) instanceof StringItem)
-				{
-					gc.drawString(((StringItem)items.get(i)).getText(), width/2, y, Graphics.HCENTER);
+				else {
+	        gc.setColor(0x000000);
 				}
-				gc.setColor(0x000000);
-				if(items.get(i) instanceof ImageItem)
+				if(items.get(i) instanceof StringItem) {
+				  __drawString((StringItem)items.get(i), gc, y, width, 15);
+				}
+				else if(items.get(i) instanceof ImageItem)
 				{
-					gc.drawImage(((ImageItem)items.get(i)).getImage(), width/2, y, Graphics.HCENTER);
+          __drawImage((ImageItem)items.get(i), gc,y, width, 15);
+				}
+				else {
+	        gc.drawString(items.get(i).getLabel(), width/2, y, Graphics.HCENTER);
 				}
 				y+=15;
 			}
@@ -312,4 +315,42 @@ public abstract class Displayable
 			}
 		}
 	}
+
+  public static void __drawString(StringItem si, PlatformGraphics gc, int y, int sx, int sy) {
+    gc.drawString(si.getLabel(), sx / 2, y, Graphics.HCENTER);
+    gc.drawString(si.getText(), sx / 2, y, Graphics.HCENTER);
+  }
+
+  public static void __drawImage(ImageItem imageItem, PlatformGraphics gc, int y, int sx, int sy) {
+    Image im = imageItem.getImage();
+    int isw = im.getWidth();
+    int isy = im.getHeight();
+    int px1;
+    int px2;
+    int py1;
+    int py2;
+    int mode;
+    py1 = y + ((isy < sy) ? (sy - isy) / 2 : 0);
+    py2 = y;
+    switch (imageItem.getLayout()) {
+      case Item.LAYOUT_CENTER:
+        px1 = sx / 2;
+        px2 = sx / 2;
+        mode = Graphics.HCENTER;
+        break;
+      case Item.LAYOUT_RIGHT:
+        px1 = sx;
+        px2 = sx - isw;
+        mode = Graphics.RIGHT;
+        break;
+      default:
+        px1 = 0;
+        px2 = isw + 1;
+        mode = Graphics.LEFT;
+        break;
+    }
+    gc.drawString(imageItem.getLabel(), px2, py2, mode);
+    gc.drawImage(imageItem.getImage(), px1, py1, mode);
+  }
+
 }
