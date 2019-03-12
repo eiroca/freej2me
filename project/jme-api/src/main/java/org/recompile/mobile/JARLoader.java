@@ -152,7 +152,7 @@ className= midletClass.getCanonicalName();
 			try
 			{
 				mainClass = loadClass(mainClass.getSuperclass().getName(), true);
-				start = mainClass.getDeclaredMethod("startApp");
+				start = mainClass.getMethod("startApp");
 				start.setAccessible(true);
 			}
 			catch (Exception f)
