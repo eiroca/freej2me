@@ -22,20 +22,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import java.lang.ClassLoader;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
-import java.util.HashMap;
-
+import java.util.Locale;
+import java.util.Properties;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.ClassAdapter;
@@ -44,9 +39,7 @@ import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import javax.microedition.lcdui.*;
 import javax.microedition.midlet.*;
-import javax.microedition.io.*;
 
 public class JARLoader extends URLClassLoader implements MIDletLoader
 {
@@ -59,7 +52,7 @@ public class JARLoader extends URLClassLoader implements MIDletLoader
 	private Class<?> mainClass;
 	private MIDlet mainInst;
 
-	private HashMap<String, String> properties = new HashMap<String, String>(32);
+  private Properties properties = new Properties();
 
 	public JARLoader(URL urls[])
 	{
@@ -67,11 +60,7 @@ public class JARLoader extends URLClassLoader implements MIDletLoader
 
 		try
 		{
-			System.setProperty("microedition.platform", "j2me");
-			System.setProperty("microedition.profiles", "MIDP-2.0");
-			System.setProperty("microedition.configuration", "CLDC-1.0");
-			System.setProperty("microedition.locale", "en-US");
-			System.setProperty("microedition.encoding", "file.encoding");
+      updateProperties(System.getProperties());
 		}
 		catch (Exception e)
 		{
@@ -81,12 +70,7 @@ public class JARLoader extends URLClassLoader implements MIDletLoader
 		try
 		{
 			loadManifest();
-
-			properties.put("microedition.platform", "j2me");
-			properties.put("microedition.profiles", "MIDP-2.0");
-			properties.put("microedition.configuration", "CLDC-1.0");
-			properties.put("microedition.locale", "en-US");
-			properties.put("microedition.encoding", "file.encoding");
+      updateProperties(properties);
 		}
 		catch (Exception e)
 		{
@@ -98,14 +82,10 @@ public class JARLoader extends URLClassLoader implements MIDletLoader
 
 	public JARLoader(Class<?> midletClass) {
 		super(null);
-		properties.put("microedition.platform", "j2me");
-		properties.put("microedition.profiles", "MIDP-2.0");
-		properties.put("microedition.configuration", "CLDC-1.0");
-		properties.put("microedition.locale", "en-US");
-		properties.put("microedition.encoding", "file.encoding");
+    updateProperties(properties);
 		name = midletClass.getSimpleName();
 		icon=null;
-className= midletClass.getCanonicalName();
+    className= midletClass.getCanonicalName();
 
 		suitename=name;
 
@@ -118,7 +98,22 @@ className= midletClass.getCanonicalName();
 		}
 	}
 
-	public void start() throws MIDletStateChangeException
+  protected void updateProperties(Properties p) {
+    updateProperties(p, Locale.getDefault());
+  }
+
+  protected void updateProperties(Properties p, Locale l) {
+    String locale = null;
+    if (l != null) locale = l.toLanguageTag();
+    if (locale == null) locale = "en-US";
+    p.setProperty("microedition.platform", "j2me");
+    p.setProperty("microedition.profiles", "MIDP-2.0");
+    p.setProperty("microedition.configuration", "CLDC-1.0");
+    p.setProperty("microedition.locale", locale);
+    p.setProperty("microedition.encoding", "file.encoding");
+  }
+
+  public void start() throws MIDletStateChangeException
 	{
 		Method start;
 
@@ -126,7 +121,7 @@ className= midletClass.getCanonicalName();
 		{
 			mainClass = loadClass(className, true);
 
-			Constructor constructor;
+			Constructor<?> constructor;
 			constructor = mainClass.getConstructor();
 			constructor.setAccessible(true);
 
@@ -305,7 +300,7 @@ className= midletClass.getCanonicalName();
 		}
 	}
 
-	public Class loadClass(String name) throws ClassNotFoundException
+	public Class<?> loadClass(String name) throws ClassNotFoundException
 	{
 		InputStream stream;
 		String resource;

@@ -16,18 +16,13 @@
 */
 package javax.microedition.midlet;
 
-import java.util.HashMap;
-
-import javax.microedition.io.*;
+import java.util.Properties;
 import javax.microedition.lcdui.*;
-import javax.microedition.lcdui.game.*;
-import javax.microedition.pki.*;
-import javax.microedition.rms.*;
 
 public abstract class MIDlet
 {
 
-	public static HashMap<String, String> properties;
+	public static Properties properties;
 
 	private Display display = new Display();
 
@@ -48,10 +43,10 @@ public abstract class MIDlet
 
 	public String getAppProperty(String key)
 	{ 
-		return properties.get(key);
+		return properties.getProperty(key);
 	}
 
-	public static void initAppProperties(HashMap<String, String> initProperties)
+	public static void initAppProperties(Properties initProperties)
 	{
 		properties = initProperties;
 	}
