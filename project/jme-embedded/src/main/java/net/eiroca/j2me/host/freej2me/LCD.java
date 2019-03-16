@@ -1,4 +1,4 @@
-package org.recompile.freej2me;
+package net.eiroca.j2me.host.freej2me;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
@@ -10,12 +10,12 @@ public class LCD extends Canvas {
   /**
    * 
    */
-  private final J2MEHost j2meHost;
+  private final FreeeJ2meHost j2meHost;
 
   /**
    * @param j2meHost
    */
-  LCD(J2MEHost j2meHost) {
+  LCD(FreeeJ2meHost j2meHost) {
     this.j2meHost = j2meHost;
   }
 

@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
-package org.recompile.freej2me;
+package net.eiroca.j2me.host.freej2me;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -26,13 +26,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.imageio.ImageIO;
 import javax.microedition.midlet.MIDletStateChangeException;
+import org.recompile.freej2me.Config;
 /*
  * FreeJ2ME - AWT
  */
 import org.recompile.mobile.Mobile;
 import org.recompile.mobile.MobilePlatform;
 
-public class J2MEHost implements KeyListener, MouseListener {
+public class FreeeJ2meHost implements KeyListener, MouseListener {
 
   private Frame main;
   int lcdWidth;
@@ -48,7 +49,7 @@ public class J2MEHost implements KeyListener, MouseListener {
   private boolean rotateDisplay = false;
   int limitFPS = 0;
 
-  public J2MEHost(Class<?> midlet) {
+  public FreeeJ2meHost(Class<?> midlet) {
     main = new Frame("FreeJ2ME");
     main.setSize(350, 450);
     main.setBackground(new Color(0, 0, 64));
