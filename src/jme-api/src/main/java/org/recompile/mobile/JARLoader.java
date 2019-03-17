@@ -27,13 +27,10 @@ import java.util.Locale;
 import java.util.Properties;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
-import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodAdapter;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import org.recompile.mobile.refactor.ClassRewriter;
 
 public class JARLoader extends URLClassLoader implements MIDletLoader {
 
@@ -285,43 +282,9 @@ public class JARLoader extends URLClassLoader implements MIDletLoader {
   private byte[] instrument(final InputStream stream) throws Exception {
     final ClassReader reader = new ClassReader(stream);
     final ClassWriter writer = new ClassWriter(0);
-    final ClassVisitor visitor = new ASMVisitor(writer);
+    final ClassVisitor visitor = new ClassRewriter(writer);
     reader.accept(visitor, 0);
     return writer.toByteArray();
-  }
-
-  private class ASMVisitor extends ClassAdapter {
-
-    public ASMVisitor(final ClassVisitor visitor) {
-      super(visitor);
-    }
-
-    @Override
-    public void visit(final int version, final int access, final String name, final String signature, final String superName, final String[] interfaces) {
-      super.visit(version, access, name, signature, superName, interfaces);
-    }
-
-    @Override
-    public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature, final String[] exceptions) {
-      return new ASMMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions));
-    }
-
-    private class ASMMethodVisitor extends MethodAdapter implements Opcodes {
-
-      public ASMMethodVisitor(final MethodVisitor visitor) {
-        super(visitor);
-      }
-
-      @Override
-      public void visitMethodInsn(final int opcode, final String owner, final String name, final String desc) {
-        if ((opcode == Opcodes.INVOKEVIRTUAL) && name.equals("getResourceAsStream") && owner.equals("java/lang/Class")) {
-          mv.visitMethodInsn(Opcodes.INVOKESTATIC, "org/recompile/mobile/Mobile", name, "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;");
-        }
-        else {
-          mv.visitMethodInsn(opcode, owner, name, desc);
-        }
-      }
-    }
   }
 
   public void run() throws MIDletStateChangeException {
