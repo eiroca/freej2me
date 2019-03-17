@@ -1,14 +1,14 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
@@ -35,33 +35,34 @@ import org.recompile.mobile.MobilePlatform;
 
 public class FreeeJ2meHost implements KeyListener, MouseListener {
 
-  private Frame main;
+  private final Frame main;
   int lcdWidth;
   int lcdHeight;
 
-  private LCD lcd;
+  private final LCD lcd;
 
   private int xborder;
   private int yborder;
 
   Config config;
   private boolean useNokiaControls = true;
-  private boolean rotateDisplay = false;
+  private final boolean rotateDisplay = false;
   int limitFPS = 0;
 
-  public FreeeJ2meHost(Class<?> midlet) {
+  public FreeeJ2meHost(final Class<?> midlet) {
     main = new Frame("FreeJ2ME");
     main.setSize(350, 450);
     main.setBackground(new Color(0, 0, 64));
     try {
       main.setIconImage(ImageIO.read(main.getClass().getResourceAsStream("/org/recompile/icon.png")));
     }
-    catch (Exception e) {
+    catch (final Exception e) {
     }
 
     main.addWindowListener(new WindowAdapter() {
 
-      public void windowClosing(WindowEvent e) {
+      @Override
+      public void windowClosing(final WindowEvent e) {
         System.exit(0);
       }
     });
@@ -69,7 +70,7 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     // Setup Device //
     lcdWidth = 240;
     lcdHeight = 320;
-    MobilePlatform p = new MobilePlatform(lcdWidth, lcdHeight);
+    final MobilePlatform p = new MobilePlatform(lcdWidth, lcdHeight);
     Mobile.setPlatform(p);
 
     lcd = new LCD(this);
@@ -77,19 +78,9 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     main.add(lcd);
 
     config = new Config();
-    config.onChange = new Runnable() {
+    config.onChange = () -> settingsChanged();
 
-      public void run() {
-        settingsChanged();
-      }
-    };
-
-    Mobile.getPlatform().setPainter(new Runnable() {
-
-      public void run() {
-        lcd.paint(lcd.getGraphics());
-      }
-    });
+    Mobile.getPlatform().setPainter(() -> lcd.paint(lcd.getGraphics()));
 
     lcd.addKeyListener(this);
 
@@ -97,7 +88,8 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
 
     main.addComponentListener(new ComponentAdapter() {
 
-      public void componentResized(ComponentEvent e) {
+      @Override
+      public void componentResized(final ComponentEvent e) {
         resize();
       }
     });
@@ -115,7 +107,7 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
       try {
         Mobile.getPlatform().run();
       }
-      catch (MIDletStateChangeException e1) {
+      catch (final MIDletStateChangeException e1) {
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
@@ -126,14 +118,14 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
   }
 
   private void settingsChanged() {
-    int w = Integer.parseInt(config.settings.get("width"));
-    int h = Integer.parseInt(config.settings.get("height"));
+    final int w = Integer.parseInt(config.settings.get("width"));
+    final int h = Integer.parseInt(config.settings.get("height"));
     limitFPS = Integer.parseInt(config.settings.get("fps"));
     if (limitFPS > 0) {
       limitFPS = 1000 / limitFPS;
     }
 
-    String sound = config.settings.get("sound");
+    final String sound = config.settings.get("sound");
     if (sound.equals("on")) {
       Mobile.getPlatform().sound = true;
     }
@@ -141,7 +133,7 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
       Mobile.getPlatform().sound = false;
     }
 
-    String nokia = config.settings.get("nokia");
+    final String nokia = config.settings.get("nokia");
     if (nokia.equals("on")) {
       useNokiaControls = true;
     }
@@ -149,7 +141,7 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
       useNokiaControls = false;
     }
 
-    if (lcdWidth != w || lcdHeight != h) {
+    if ((lcdWidth != w) || (lcdHeight != h)) {
       lcdWidth = w;
       lcdHeight = h;
       Mobile.getPlatform().resizeLCD(w, h);
@@ -158,7 +150,7 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     }
   }
 
-  private int getMobileKey(int keycode) {
+  private int getMobileKey(final int keycode) {
     if (useNokiaControls) {
       switch (keycode) {
         case KeyEvent.VK_UP:
@@ -244,7 +236,7 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
         return -1;
       case KeyEvent.VK_Z:
         return -2;
-      // Config 
+      // Config
       case KeyEvent.VK_ESCAPE:
         config.start();
     }
@@ -255,8 +247,8 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     xborder = main.getInsets().left + main.getInsets().right;
     yborder = main.getInsets().top + main.getInsets().bottom;
 
-    double vw = (main.getWidth() - xborder) * 1;
-    double vh = (main.getHeight() - yborder) * 1;
+    final double vw = (main.getWidth() - xborder) * 1;
+    final double vh = (main.getHeight() - yborder) * 1;
 
     double nw = lcdWidth;
     double nh = lcdHeight;
@@ -272,7 +264,8 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     lcd.updateScale((int)nw, (int)nh);
   }
 
-  public void keyPressed(KeyEvent e) {
+  @Override
+  public void keyPressed(final KeyEvent e) {
     if (config.isRunning) {
       config.keyPressed(getMobileKey(e.getKeyCode()));
     }
@@ -281,7 +274,8 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     }
   }
 
-  public void keyReleased(KeyEvent e) {
+  @Override
+  public void keyReleased(final KeyEvent e) {
     if (config.isRunning) {
       config.keyReleased(getMobileKey(e.getKeyCode()));
     }
@@ -290,27 +284,33 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
     }
   }
 
-  public void keyTyped(KeyEvent e) {
+  @Override
+  public void keyTyped(final KeyEvent e) {
   }
 
-  public void mousePressed(MouseEvent e) {
-    int x = (int)((e.getX() - lcd.cx) * lcd.scalex);
-    int y = (int)((e.getY() - lcd.cy) * lcd.scaley);
+  @Override
+  public void mousePressed(final MouseEvent e) {
+    final int x = (int)((e.getX() - lcd.cx) * lcd.scalex);
+    final int y = (int)((e.getY() - lcd.cy) * lcd.scaley);
     Mobile.getPlatform().pointerPressed(x, y);
   }
 
-  public void mouseReleased(MouseEvent e) {
-    int x = (int)((e.getX() - lcd.cx) * lcd.scalex);
-    int y = (int)((e.getY() - lcd.cy) * lcd.scaley);
+  @Override
+  public void mouseReleased(final MouseEvent e) {
+    final int x = (int)((e.getX() - lcd.cx) * lcd.scalex);
+    final int y = (int)((e.getY() - lcd.cy) * lcd.scaley);
     Mobile.getPlatform().pointerReleased(x, y);
   }
 
-  public void mouseExited(MouseEvent e) {
+  @Override
+  public void mouseExited(final MouseEvent e) {
   }
 
-  public void mouseEntered(MouseEvent e) {
+  @Override
+  public void mouseEntered(final MouseEvent e) {
   }
 
-  public void mouseClicked(MouseEvent e) {
+  @Override
+  public void mouseClicked(final MouseEvent e) {
   }
 }
