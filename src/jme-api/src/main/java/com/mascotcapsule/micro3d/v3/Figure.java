@@ -1,43 +1,43 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package com.mascotcapsule.micro3d.v3;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import org.recompile.mobile.Mobile;
 
 public class Figure {
 
   private byte[] figure;
-  private ArrayList<Texture> textures = new ArrayList<Texture>();
+  private final ArrayList<Texture> textures = new ArrayList<>();
   private int selected = 0;
   private int pattern = 0;
 
-  public Figure(byte[] fig) {
+  public Figure(final byte[] fig) {
     figure = fig;
   }
 
-  public Figure(String name) throws IOException {
-    InputStream stream = Mobile.getPlatform().loader.getResourceAsStream(name);
+  public Figure(final String name) throws IOException {
+    final InputStream stream = Mobile.getPlatform().loader.getResourceAsStream(name);
     try {
-      ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+      final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       int count = 0;
-      byte[] data = new byte[4096];
+      final byte[] data = new byte[4096];
       while (count != -1) {
         count = stream.read(data);
         if (count != -1) {
@@ -46,31 +46,31 @@ public class Figure {
       }
       figure = buffer.toByteArray();
     }
-    catch (Exception e) {
+    catch (final Exception e) {
     }
   }
 
   public final void dispose() {
   }
 
-  public final void setPosture(ActionTable actiontable, int i, int j) {
+  public final void setPosture(final ActionTable actiontable, final int i, final int j) {
   }
 
   public final Texture getTexture() {
     return null;
   }
 
-  public final void setTexture(Texture texture) {
+  public final void setTexture(final Texture texture) {
   }
 
-  public final void setTexture(Texture[] atexture) {
+  public final void setTexture(final Texture[] atexture) {
   }
 
   public final int getNumTextures() {
     return textures.size();
   }
 
-  public final void selectTexture(int i) {
+  public final void selectTexture(final int i) {
     selected = i;
   }
 
@@ -78,7 +78,7 @@ public class Figure {
     return pattern;
   }
 
-  public final void setPattern(int value) {
+  public final void setPattern(final int value) {
     pattern = value;
   }
 

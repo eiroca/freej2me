@@ -1,24 +1,22 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
 import org.recompile.mobile.Mobile;
 import org.recompile.mobile.PlatformImage;
-import org.recompile.mobile.PlatformGraphics;
-import java.util.ArrayList;
 
 public class List extends Screen implements Choice {
 
@@ -26,9 +24,9 @@ public class List extends Screen implements Choice {
 
   private int fitPolicy = Choice.TEXT_WRAP_ON;
 
-  private int type;
+  private final int type;
 
-  public List(String title, int listType) {
+  public List(final String title, final int listType) {
     setTitle(title);
     type = listType;
 
@@ -37,7 +35,7 @@ public class List extends Screen implements Choice {
     render();
   }
 
-  public List(String title, int listType, String[] stringElements, Image[] imageElements) {
+  public List(final String title, final int listType, final String[] stringElements, final Image[] imageElements) {
     setTitle(title);
     type = listType;
 
@@ -54,7 +52,8 @@ public class List extends Screen implements Choice {
     render();
   }
 
-  public int append(String stringPart, Image imagePart) {
+  @Override
+  public int append(final String stringPart, final Image imagePart) {
     if (imagePart != null) {
       items.add(new ImageItem(stringPart, imagePart, 0, stringPart));
     }
@@ -65,46 +64,55 @@ public class List extends Screen implements Choice {
     return items.size() - 1;
   }
 
-  public void delete(int elementNum) {
+  @Override
+  public void delete(final int elementNum) {
     try {
       items.remove(elementNum);
     }
-    catch (Exception e) {
+    catch (final Exception e) {
     }
     render();
   }
 
+  @Override
   public void deleteAll() {
     items.clear();
     render();
   }
 
+  @Override
   public int getFitPolicy() {
     return fitPolicy;
   }
 
-  public Font getFont(int elementNum) {
+  @Override
+  public Font getFont(final int elementNum) {
     return Font.getDefaultFont();
   }
 
-  public Image getImage(int elementNum) {
+  @Override
+  public Image getImage(final int elementNum) {
     return ((ImageItem)(items.get(elementNum))).getImage();
   }
 
-  public int getSelectedFlags(boolean[] selectedArray_return) {
+  @Override
+  public int getSelectedFlags(final boolean[] selectedArray_return) {
     return 0;
   }
 
+  @Override
   public int getSelectedIndex() {
     return currentItem;
   }
 
-  public String getString(int elementNum) {
+  @Override
+  public String getString(final int elementNum) {
     return ((StringItem)(items.get(elementNum))).getText();
   }
 
-  public void insert(int elementNum, String stringPart, Image imagePart) {
-    if (elementNum < items.size() && elementNum > 0) {
+  @Override
+  public void insert(final int elementNum, final String stringPart, final Image imagePart) {
+    if ((elementNum < items.size()) && (elementNum > 0)) {
       try {
         if (imagePart != null) {
           items.add(elementNum, new ImageItem(stringPart, imagePart, 0, stringPart));
@@ -113,7 +121,7 @@ public class List extends Screen implements Choice {
           items.add(elementNum, new StringItem(stringPart, stringPart));
         }
       }
-      catch (Exception e) {
+      catch (final Exception e) {
         append(stringPart, imagePart);
       }
     }
@@ -123,13 +131,15 @@ public class List extends Screen implements Choice {
     render();
   }
 
-  public boolean isSelected(int elementNum) {
+  @Override
+  public boolean isSelected(final int elementNum) {
     return elementNum == currentItem;
   }
 
   // public void removeCommand(Command cmd) {  }
 
-  public void set(int elementNum, String stringPart, Image imagePart) {
+  @Override
+  public void set(final int elementNum, final String stringPart, final Image imagePart) {
     if (imagePart != null) {
       items.set(elementNum, new ImageItem(stringPart, imagePart, 0, stringPart));
     }
@@ -138,21 +148,25 @@ public class List extends Screen implements Choice {
     }
   }
 
-  public void setFitPolicy(int fitpolicy) {
+  @Override
+  public void setFitPolicy(final int fitpolicy) {
     fitPolicy = fitpolicy;
   }
 
-  public void setFont(int elementNum, Font font) {
+  @Override
+  public void setFont(final int elementNum, final Font font) {
   }
 
-  public void setSelectCommand(Command command) {
-    SELECT_COMMAND = command;
+  public void setSelectCommand(final Command command) {
+    List.SELECT_COMMAND = command;
   }
 
-  public void setSelectedFlags(boolean[] selectedArray) {
+  @Override
+  public void setSelectedFlags(final boolean[] selectedArray) {
   }
 
-  public void setSelectedIndex(int elementNum, boolean selected) {
+  @Override
+  public void setSelectedIndex(final int elementNum, final boolean selected) {
     if (selected == true) {
       currentItem = elementNum;
     }
@@ -166,6 +180,7 @@ public class List extends Screen implements Choice {
 
   //void setTitle(String s)
 
+  @Override
   public int size() {
     return items.size();
   }
@@ -174,7 +189,8 @@ public class List extends Screen implements Choice {
   	Draw list, handle input
   */
 
-  public void keyPressed(int key) {
+  @Override
+  public void keyPressed(final int key) {
     if (items.size() < 1) { return; }
     switch (key) {
       case Mobile.KEY_NUM2:
@@ -208,12 +224,14 @@ public class List extends Screen implements Choice {
     render();
   }
 
+  @Override
   protected void doDefaultCommand() {
     if (commandlistener != null) {
-      commandlistener.commandAction(SELECT_COMMAND, this);
+      commandlistener.commandAction(List.SELECT_COMMAND, this);
     }
   }
 
+  @Override
   public void notifySetCurrent() {
     render();
   }

@@ -1,21 +1,20 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
-import java.util.ArrayList;
 import org.recompile.mobile.Mobile;
 
 public class Alert extends Screen {
@@ -26,29 +25,24 @@ public class Alert extends Screen {
   private String message;
   private Image image;
   private AlertType type;
-  private int timeout = FOREVER;
+  private int timeout = Alert.FOREVER;
   private Gauge indicator;
   private Displayable nextScreen = null;
 
-  public Alert(String title) {
-    System.out.println("Alert: " + title);
+  public Alert(final String title) {
+    Mobile.log("Alert: " + title);
     setTitle(title);
     Thread.dumpStack();
   }
 
-  public Alert(String title, String alertText, Image alertImage, AlertType alertType) {
-    System.out.println("Alert: " + title);
-    System.out.println("Alert: " + alertText);
-
+  public Alert(final String title, final String alertText, final Image alertImage, final AlertType alertType) {
+    Mobile.log("Alert: " + title + " - " + alertText);
     setTitle(title);
     setString(alertText);
     setImage(alertImage);
     setType(alertType);
-
     setTimeout(getDefaultTimeout());
-
     addCommand(Alert.DISMISS_COMMAND);
-
     setCommandListener(defaultListener);
   }
 
@@ -60,7 +54,7 @@ public class Alert extends Screen {
     return timeout;
   }
 
-  public void setTimeout(int time) {
+  public void setTimeout(final int time) {
     timeout = time;
   }
 
@@ -68,7 +62,7 @@ public class Alert extends Screen {
     return type;
   }
 
-  public void setType(AlertType t) {
+  public void setType(final AlertType t) {
     type = t;
   }
 
@@ -76,8 +70,8 @@ public class Alert extends Screen {
     return message;
   }
 
-  public void setString(String text) {
-    System.out.println(text);
+  public void setString(final String text) {
+    Mobile.debug(text);
     message = text;
   }
 
@@ -85,11 +79,11 @@ public class Alert extends Screen {
     return image;
   }
 
-  public void setImage(Image img) {
+  public void setImage(final Image img) {
     image = img;
   }
 
-  public void setIndicator(Gauge gauge) {
+  public void setIndicator(final Gauge gauge) {
     indicator = gauge;
   }
 
@@ -97,7 +91,8 @@ public class Alert extends Screen {
     return indicator;
   }
 
-  public void addCommand(Command cmd) {
+  @Override
+  public void addCommand(final Command cmd) {
     super.addCommand(cmd);
 
     if (getCommands().size() == 2) {
@@ -106,12 +101,14 @@ public class Alert extends Screen {
 
   }
 
-  public void removeCommand(Command cmd) {
+  @Override
+  public void removeCommand(final Command cmd) {
     if (getCommands().size() > 1) {
       super.removeCommand(cmd);
     }
   }
 
+  @Override
   public void setCommandListener(CommandListener listener) {
     if (listener == null) {
       listener = defaultListener;
@@ -119,14 +116,9 @@ public class Alert extends Screen {
     super.setCommandListener(listener);
   }
 
-  public CommandListener defaultListener = new CommandListener() {
+  public CommandListener defaultListener = (cmd, next) -> Mobile.getDisplay().setCurrent(next);
 
-    public void commandAction(Command cmd, Displayable next) {
-      Mobile.getDisplay().setCurrent(next);
-    }
-  };
-
-  public void setNextScreen(Displayable next) {
+  public void setNextScreen(final Displayable next) {
     nextScreen = next;
   }
 

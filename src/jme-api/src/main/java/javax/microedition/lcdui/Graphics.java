@@ -1,23 +1,22 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
-import org.recompile.mobile.Mobile;
-import org.recompile.mobile.PlatformImage;
 import org.recompile.mobile.PlatformGraphics;
+import org.recompile.mobile.PlatformImage;
 
 public class Graphics {
 
@@ -41,64 +40,64 @@ public class Graphics {
 
   protected int color = 0xFFFFFF;
   protected Font font = Font.getDefaultFont();
-  protected int strokeStyle = SOLID;
+  protected int strokeStyle = Graphics.SOLID;
 
   public PlatformImage platformImage;
   public PlatformGraphics platformGraphics;
 
-  public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) {
+  public void copyArea(final int x_src, final int y_src, final int width, final int height, final int x_dest, final int y_dest, final int anchor) {
   }
 
-  public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+  public void drawArc(final int x, final int y, final int width, final int height, final int startAngle, final int arcAngle) {
   }
 
-  public void drawChar(char character, int x, int y, int anchor) {
+  public void drawChar(final char character, final int x, final int y, final int anchor) {
   }
 
-  public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) {
+  public void drawChars(final char[] data, final int offset, final int length, final int x, final int y, final int anchor) {
   }
 
-  public void drawImage(Image img, int x, int y, int anchor) {
+  public void drawImage(final Image img, final int x, final int y, final int anchor) {
   }
 
-  public void drawLine(int x1, int y1, int x2, int y2) {
+  public void drawLine(final int x1, final int y1, final int x2, final int y2) {
   }
 
-  public void drawRect(int x, int y, int width, int height) {
+  public void drawRect(final int x, final int y, final int width, final int height) {
   }
 
-  public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) {
+  public void drawRegion(final Image src, final int x_src, final int y_src, final int width, final int height, final int transform, final int x_dest, final int y_dest, final int anchor) {
   }
 
-  public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
+  public void drawRGB(final int[] rgbData, final int offset, final int scanlength, final int x, final int y, final int width, final int height, final boolean processAlpha) {
   }
 
-  public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
+  public void drawRoundRect(final int x, final int y, final int width, final int height, final int arcWidth, final int arcHeight) {
   }
 
-  public void drawString(String str, int x, int y, int anchor) {
+  public void drawString(final String str, final int x, final int y, final int anchor) {
   }
 
-  public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
+  public void drawSubstring(final String str, final int offset, final int len, final int x, final int y, final int anchor) {
   }
 
-  public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+  public void fillArc(final int x, final int y, final int width, final int height, final int startAngle, final int arcAngle) {
   }
 
-  public void fillRect(int x, int y, int width, int height) {
+  public void fillRect(final int x, final int y, final int width, final int height) {
   }
 
-  public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
+  public void fillRoundRect(final int x, final int y, final int width, final int height, final int arcWidth, final int arcHeight) {
   }
 
-  public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+  public void fillTriangle(final int x1, final int y1, final int x2, final int y2, final int x3, final int y3) {
   }
 
   public int getColor() {
     return color;
   }
 
-  public int getDisplayColor(int trycolor) {
+  public int getDisplayColor(final int trycolor) {
     return trycolor;
   }
 
@@ -107,9 +106,9 @@ public class Graphics {
   }
 
   public int getGrayScale() {
-    int r = (color >> 16) & 0xFF;
-    int g = (color >> 8) & 0xFF;
-    int b = color & 0xFF;
+    final int r = (color >> 16) & 0xFF;
+    final int g = (color >> 8) & 0xFF;
+    final int b = color & 0xFF;
     return ((r + g + b) / 3) & 0xFF;
   }
 
@@ -129,10 +128,10 @@ public class Graphics {
     return strokeStyle;
   }
 
-  public void clipRect(int x, int y, int width, int height) {
+  public void clipRect(final int x, final int y, final int width, final int height) {
   }
 
-  public void setClip(int x, int y, int width, int height) {
+  public void setClip(final int x, final int y, final int width, final int height) {
   }
 
   public int getClipHeight() {
@@ -151,7 +150,7 @@ public class Graphics {
     return clipY;
   }
 
-  public void translate(int x, int y) {
+  public void translate(final int x, final int y) {
     translateX += x;
     translateY += y;
   }
@@ -164,15 +163,15 @@ public class Graphics {
     return translateY;
   }
 
-  public void setColor(int RGB) {
+  public void setColor(final int RGB) {
     color = RGB;
   }
 
-  public void setColor(int red, int green, int blue) {
+  public void setColor(final int red, final int green, final int blue) {
     color = (red << 16) + (green << 8) + blue;
   }
 
-  public void setFont(Font newfont) {
+  public void setFont(final Font newfont) {
     font = newfont;
   }
 
@@ -181,7 +180,7 @@ public class Graphics {
     color = (value << 16) + (value << 8) + value;
   }
 
-  public void setStrokeStyle(int style) {
+  public void setStrokeStyle(final int style) {
     strokeStyle = style;
   }
 

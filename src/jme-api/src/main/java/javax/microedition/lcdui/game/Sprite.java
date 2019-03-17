@@ -1,23 +1,24 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui.game;
 
 import java.util.Vector;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import org.recompile.mobile.Mobile;
 
 public class Sprite extends Layer {
 
@@ -40,7 +41,7 @@ public class Sprite extends Layer {
 
   private int transform;
 
-  private Vector<Integer> sequence = new Vector<Integer>();
+  private final Vector<Integer> sequence = new Vector<>();
 
   private int frame;
   private int frameWidth;
@@ -51,51 +52,51 @@ public class Sprite extends Layer {
   public int rowCount;
   public int colCount;
 
-  public Sprite(Image image) {
+  public Sprite(final Image image) {
     setImage(image, image.width, image.height);
   }
 
-  public Sprite(Image image, int frameW, int frameH) {
+  public Sprite(final Image image, final int frameW, final int frameH) {
     setImage(image, frameW, frameH);
   }
 
-  public Sprite(Sprite s) {
-    System.out.println("Sprite sprite");
+  public Sprite(final Sprite s) {
+    Mobile.log("Sprite sprite");
     sprite = s.sprite;
   }
 
-  public boolean collidesWith(Image image, int x, int y, boolean pixelLevel) {
+  public boolean collidesWith(final Image image, final int x, final int y, final boolean pixelLevel) {
     return false;
   }
 
-  public boolean collidesWith(Sprite s, boolean pixelLevel) {
-    int Ax = (x + refX) + hitX;
-    int Ay = (y + refY) + hitY;
-    int Aw = hitWidth;
-    int Ah = hitHeight;
+  public boolean collidesWith(final Sprite s, final boolean pixelLevel) {
+    final int Ax = (x + refX) + hitX;
+    final int Ay = (y + refY) + hitY;
+    final int Aw = hitWidth;
+    final int Ah = hitHeight;
 
-    int Bx = (s.getX() + s.getRefPixelX()) + s.getHitX();
-    int By = (s.getY() + s.getRefPixelY()) + s.getHitY();
-    int Bw = s.getHitWidth();
-    int Bh = s.getHitHeight();
+    final int Bx = (s.getX() + s.getRefPixelX()) + s.getHitX();
+    final int By = (s.getY() + s.getRefPixelY()) + s.getHitY();
+    final int Bw = s.getHitWidth();
+    final int Bh = s.getHitHeight();
 
-    if ((Ax + Aw) > Bx && Ax < (Bx + Bw) && (Ay + Ah) > By && Ay < (By + Bh)) { return true; }
+    if (((Ax + Aw) > Bx) && (Ax < (Bx + Bw)) && ((Ay + Ah) > By) && (Ay < (By + Bh))) { return true; }
 
     return false;
   }
 
-  public boolean collidesWith(TiledLayer t, boolean pixelLevel) {
+  public boolean collidesWith(final TiledLayer t, final boolean pixelLevel) {
     return false;
   }
 
-  public void defineCollisionRectangle(int x, int y, int width, int height) {
+  public void defineCollisionRectangle(final int x, final int y, final int width, final int height) {
     hitX = x;
     hitY = y;
     hitWidth = width;
     hitHeight = height;
   }
 
-  public void defineReferencePixel(int x, int y) {
+  public void defineReferencePixel(final int x, final int y) {
     refX = x;
     refY = y;
   }
@@ -121,7 +122,7 @@ public class Sprite extends Layer {
   }
 
   public void nextFrame() {
-    if (frame < sequence.size() - 1) {
+    if (frame < (sequence.size() - 1)) {
       frame++;
     }
     else {
@@ -129,15 +130,16 @@ public class Sprite extends Layer {
     }
   }
 
-  public void paint(Graphics g) {
+  @Override
+  public void paint(final Graphics g) {
     try {
-      int f = sequence.get(frame);
-      int r = frameHeight * (f / colCount);
-      int c = frameWidth * (f % colCount);
+      final int f = sequence.get(frame);
+      final int r = frameHeight * (f / colCount);
+      final int c = frameWidth * (f % colCount);
       g.drawRegion(sprite, c, r, frameWidth, frameHeight, transform, x, y, 0);
     }
-    catch (Exception e) {
-      System.out.println("Problem drawing sprite");
+    catch (final Exception e) {
+      Mobile.log("Problem drawing sprite");
     }
   }
 
@@ -150,25 +152,25 @@ public class Sprite extends Layer {
     }
   }
 
-  public void setFrame(int sequenceIndex) {
+  public void setFrame(final int sequenceIndex) {
     frame = sequenceIndex;
   }
 
-  public void setFrameSequence(int[] fsequence) {
-    //System.out.println("Set Frame Sequence");
+  public void setFrameSequence(final int[] fsequence) {
+    Mobile.debug("Set Frame Sequence");
     try {
       frame = 0;
       sequence.clear();
-      for (int i = 0; i < fsequence.length; i++) {
-        sequence.add(fsequence[i]);
+      for (final int element : fsequence) {
+        sequence.add(element);
       }
     }
-    catch (Exception e) {
-      System.out.println("Problem with Sequence");
+    catch (final Exception e) {
+      Mobile.log("Problem with Sequence");
     }
   }
 
-  public void setImage(Image img, int frameW, int frameH) {
+  public void setImage(final Image img, final int frameW, final int frameH) {
     sprite = img;
     frameWidth = frameW;
     frameHeight = frameH;
@@ -178,11 +180,11 @@ public class Sprite extends Layer {
     hitWidth = frameWidth;
     hitHeight = frameHeight;
 
-    double spriteW = sprite.platformImage.width;
-    double spriteH = sprite.platformImage.height;
+    final double spriteW = sprite.platformImage.width;
+    final double spriteH = sprite.platformImage.height;
 
-    colCount = (int)Math.floor(spriteW / (double)frameW);
-    rowCount = (int)Math.floor(spriteH / (double)frameH);
+    colCount = (int)Math.floor(spriteW / frameW);
+    rowCount = (int)Math.floor(spriteH / frameH);
 
     frameCount = colCount * rowCount;
 
@@ -193,12 +195,12 @@ public class Sprite extends Layer {
     }
   }
 
-  public void setRefPixelPosition(int x, int y) {
+  public void setRefPixelPosition(final int x, final int y) {
     refX = x;
     refY = y;
   }
 
-  public void setTransform(int value) {
+  public void setTransform(final int value) {
     transform = value;
   }
 

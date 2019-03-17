@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package com.nokia.mid.sound;
 
@@ -85,27 +85,27 @@ public class Sound {
   private int curNoteDuration;
 
   static {
-    soundListenerThread = new SoundListenerThread();
-    soundListenerThread.start();
+    Sound.soundListenerThread = new SoundListenerThread();
+    Sound.soundListenerThread.start();
   }
 
-  public Sound(byte[] data, int type) {
+  public Sound(final byte[] data, final int type) {
     init(data, type);
-    this.curSoundVolume = getGain0();
+    curSoundVolume = Sound.getGain0();
   }
 
-  public Sound(int freq, long duration) {
+  public Sound(final int freq, final long duration) {
     init(freq, duration);
-    this.curSoundVolume = getGain0();
+    curSoundVolume = Sound.getGain0();
   }
 
-  public static int getConcurrentSoundCount(int type) {
+  public static int getConcurrentSoundCount(final int type) {
     if (type != 1) { throw new IllegalArgumentException(); }
     return 1;
   }
 
   public int getGain() {
-    return this.curSoundVolume;
+    return curSoundVolume;
   }
 
   public void setGain(int gain) {
@@ -115,36 +115,36 @@ public class Sound {
     else if (gain > 255) {
       gain = 255;
     }
-    this.curSoundVolume = gain;
-    setGain0(this.curSoundVolume);
+    curSoundVolume = gain;
+    Sound.setGain0(curSoundVolume);
   }
 
   public int getState() {
-    return this.curSoundState;
+    return curSoundState;
   }
 
   public static int[] getSupportedFormats() {
-    return supportedToneFormats;
+    return Sound.supportedToneFormats;
   }
 
-  public void init(byte[] data, int type) {
-    if (this.curSoundState == 0) {
+  public void init(final byte[] data, final int type) {
+    if (curSoundState == 0) {
       stop();
     }
     if (data == null) {
-      soundStateChanged(this, 3);
+      Sound.soundStateChanged(this, 3);
       throw new NullPointerException();
     }
     if (type != 1) {
-      soundStateChanged(this, 3);
+      Sound.soundStateChanged(this, 3);
       throw new IllegalArgumentException();
     }
     if ((data.length > 2700) || (data.length < 4)) {
-      soundStateChanged(this, 3);
+      Sound.soundStateChanged(this, 3);
       throw new IllegalArgumentException();
     }
     if (data[1] != 74) {
-      soundStateChanged(this, 3);
+      Sound.soundStateChanged(this, 3);
       throw new IllegalArgumentException();
     }
     byte[] tmpData;
@@ -152,130 +152,130 @@ public class Sound {
       tmpData = new byte[data.length];
       System.arraycopy(data, 0, tmpData, 0, data.length);
     }
-    catch (Exception ex) {
-      soundStateChanged(this, 3);
+    catch (final Exception ex) {
+      Sound.soundStateChanged(this, 3);
       throw new IllegalArgumentException();
     }
-    this.objectType = 0;
-    this.curSoundData = tmpData;
-    if (this.curSoundState == 3) {
-      soundStateChanged(this, 1);
+    objectType = 0;
+    curSoundData = tmpData;
+    if (curSoundState == 3) {
+      Sound.soundStateChanged(this, 1);
     }
   }
 
-  public void init(int freq, long duration) {
-    if (this.curSoundState == 0) {
+  public void init(final int freq, long duration) {
+    if (curSoundState == 0) {
       stop();
     }
     if ((duration <= 0L) || (freq < 0) || (freq > 3951)) {
-      soundStateChanged(this, 3);
+      Sound.soundStateChanged(this, 3);
       throw new IllegalArgumentException();
     }
-    if (curNoteTable == null) {
-      curNoteTable = new NoteTable(this);
+    if (Sound.curNoteTable == null) {
+      Sound.curNoteTable = new NoteTable(this);
     }
-    int index = curNoteTable.get(freq);
+    int index = Sound.curNoteTable.get(freq);
     if (index == -1) {
       int lastNote = 0;
 
-      int size = NoteTable.MAX_TONES;
+      final int size = NoteTable.MAX_TONES;
       for (int pos = 0; pos < size; pos++) {
-        int note = curNoteTable.listeVal(pos);
+        final int note = Sound.curNoteTable.listeVal(pos);
         if (note > freq) {
-          int dif1 = note - freq;
-          int dif2 = freq - lastNote;
+          final int dif1 = note - freq;
+          final int dif2 = freq - lastNote;
           if (dif1 > dif2) {
-            index = curNoteTable.get(lastNote);
+            index = Sound.curNoteTable.get(lastNote);
             break;
           }
-          index = curNoteTable.get(note);
+          index = Sound.curNoteTable.get(note);
           break;
         }
         lastNote = note;
       }
       if (index == -1) {
-        soundStateChanged(this, 3);
+        Sound.soundStateChanged(this, 3);
         throw new IllegalArgumentException();
       }
     }
-    this.objectType = 1;
-    this.curNoteData = index;
+    objectType = 1;
+    curNoteData = index;
     if (duration > 3800L) {
       duration = 3800L;
     }
-    this.curNoteDuration = ((int)duration);
-    if (this.curSoundState == 3) {
-      soundStateChanged(this, 1);
+    curNoteDuration = ((int)duration);
+    if (curSoundState == 3) {
+      Sound.soundStateChanged(this, 1);
     }
   }
 
   public synchronized void play(int loop) {
-    if (this.curSoundState == 3) { return; }
+    if (curSoundState == 3) { return; }
     if (loop < 0) { throw new IllegalArgumentException(); }
     if (loop > 255) {
       loop = 255;
     }
-    stopPlaying(curPlayingSound);
+    Sound.stopPlaying(Sound.curPlayingSound);
 
-    curPlayingSound = this;
-    this.curSoundLoop = loop;
-    soundStateChanged(this, 0);
-    if (this.curSoundVolume == 0) {
-      stopPlaying(this);
+    Sound.curPlayingSound = this;
+    curSoundLoop = loop;
+    Sound.soundStateChanged(this, 0);
+    if (curSoundVolume == 0) {
+      Sound.stopPlaying(this);
     }
     else {
-      setGain0(this.curSoundVolume);
-      if (this.objectType == 0) {
-        play0(this.curSoundData, this.curSoundData.length, loop);
+      Sound.setGain0(curSoundVolume);
+      if (objectType == 0) {
+        Sound.play0(curSoundData, curSoundData.length, loop);
       }
       else {
-        playNote0(this.curNoteData, this.curNoteDuration, loop);
+        Sound.playNote0(curNoteData, curNoteDuration, loop);
       }
     }
   }
 
   public void stop() {
-    if (curPlayingSound == this) {
-      stopPlaying(this);
+    if (Sound.curPlayingSound == this) {
+      Sound.stopPlaying(this);
     }
   }
 
-  static synchronized void stopPlaying(Sound sound) {
+  static synchronized void stopPlaying(final Sound sound) {
     if (sound == null) { return; }
     if (sound.curSoundState == 0) {
-      stop0();
-      soundStateChanged(sound, 1);
+      Sound.stop0();
+      Sound.soundStateChanged(sound, 1);
     }
   }
 
   public void release() {
-    if (this.objectType == 0) {
-      this.curSoundData = null;
+    if (objectType == 0) {
+      curSoundData = null;
     }
     else {
-      this.curNoteData = 0;
+      curNoteData = 0;
     }
-    if (this.curSoundState == 0) {
+    if (curSoundState == 0) {
       stop();
     }
-    this.curSoundVolume = getGain0();
-    if (curPlayingSound == this) {
-      curPlayingSound = null;
+    curSoundVolume = Sound.getGain0();
+    if (Sound.curPlayingSound == this) {
+      Sound.curPlayingSound = null;
     }
-    soundStateChanged(this, 3);
+    Sound.soundStateChanged(this, 3);
     setSoundListener(null);
   }
 
   public void resume() {
-    if ((this.curSoundState == 0) || (this.curSoundState == 3)) { return; }
-    play(this.curSoundLoop);
+    if ((curSoundState == 0) || (curSoundState == 3)) { return; }
+    play(curSoundLoop);
   }
 
-  public void setSoundListener(SoundListener listener) {
-    this.soundListener = listener;
+  public void setSoundListener(final SoundListener listener) {
+    soundListener = listener;
   }
 
-  static synchronized void soundStateChanged(Sound sound, int event) {
+  static synchronized void soundStateChanged(final Sound sound, final int event) {
     sound.curSoundState = event;
     if (sound.soundListener != null) {
       sound.soundListener.soundStateChanged(sound, event);

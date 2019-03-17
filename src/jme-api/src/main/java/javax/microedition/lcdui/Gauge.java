@@ -1,24 +1,21 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
-import java.util.ArrayList;
 import org.recompile.mobile.Mobile;
-import org.recompile.mobile.PlatformImage;
-import org.recompile.mobile.PlatformGraphics;
 
 public class Gauge extends Item {
 
@@ -28,16 +25,16 @@ public class Gauge extends Item {
   public static final int INCREMENTAL_UPDATING = 3;
   public static final int INDEFINITE = -1;
 
-  private boolean interactive;
+  private final boolean interactive;
   private int maxValue;
-  private int initialValue;
+  private final int initialValue;
   private int value;
   //private ArrayList<Command> commands;
   private Command defaultCommand;
   private ItemCommandListener listener;
 
-  public Gauge(String label, boolean isInteractive, int maxvalue, int initialvalue) {
-    System.out.println("Create Gauge");
+  public Gauge(final String label, final boolean isInteractive, final int maxvalue, final int initialvalue) {
+    Mobile.log("Create Gauge");
     setLabel(label);
     interactive = isInteractive;
     maxValue = maxvalue;
@@ -58,19 +55,21 @@ public class Gauge extends Item {
     return interactive;
   }
 
-  public void setDefaultCommand(Command cmd) {
+  @Override
+  public void setDefaultCommand(final Command cmd) {
     defaultCommand = cmd;
   }
 
-  public void setItemCommandListener(ItemCommandListener l) {
+  @Override
+  public void setItemCommandListener(final ItemCommandListener l) {
     listener = l;
   }
 
-  public void setMaxValue(int maxvalue) {
+  public void setMaxValue(final int maxvalue) {
     maxValue = maxvalue;
   }
 
-  public void setValue(int newvalue) {
+  public void setValue(final int newvalue) {
     value = newvalue;
   }
 

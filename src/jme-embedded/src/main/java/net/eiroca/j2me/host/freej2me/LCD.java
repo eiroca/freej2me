@@ -1,14 +1,14 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
@@ -17,24 +17,16 @@ package net.eiroca.j2me.host.freej2me;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import org.recompile.mobile.Mobile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LCD extends Canvas {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = -959791062723408787L;
-  /**
-   *
-   */
-  private final FreeeJ2meHost j2meHost;
+  private static Logger logger = LoggerFactory.getLogger(LCD.class);
 
-  /**
-   * @param j2meHost
-   */
-  LCD(final FreeeJ2meHost j2meHost) {
-    this.j2meHost = j2meHost;
-  }
+  private static final long serialVersionUID = -959791062723408787L;
+
+  private final FreeeJ2meHost j2meHost;
 
   public int cx = 0;
   public int cy = 0;
@@ -43,6 +35,13 @@ public class LCD extends Canvas {
 
   public double scalex = 1;
   public double scaley = 1;
+
+  /**
+   * @param j2meHost
+   */
+  public LCD(final FreeeJ2meHost j2meHost) {
+    this.j2meHost = j2meHost;
+  }
 
   public void updateScale(final int vw, final int vh) {
     cx = (getWidth() - vw) / 2;
@@ -68,7 +67,7 @@ public class LCD extends Canvas {
       }
     }
     catch (final Exception e) {
-      System.out.println(e.getMessage());
+      LCD.logger.warn(e.getMessage());
     }
   }
 

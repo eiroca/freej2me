@@ -1,14 +1,14 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
@@ -17,36 +17,27 @@
  */
 package org.recompile.freej2me;
 
-import org.recompile.mobile.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.List;
+import org.recompile.mobile.MIDletLoader;
+import org.recompile.mobile.Mobile;
+import org.recompile.mobile.MobilePlatform;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import javafx.stage.Screen;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import javafx.stage.Stage;
 
 public class JavaFx extends Application {
 
@@ -69,16 +60,18 @@ public class JavaFx extends Application {
 
   Rectangle2D screenRect;
 
-  public static void main(String args[]) {
+  public static void main(final String args[]) {
     Application.launch(args);
   }
 
+  @Override
   public void stop() {
     Platform.exit();
     System.exit(0);
   }
 
-  public void start(Stage startStage) {
+  @Override
+  public void start(final Stage startStage) {
     stage = startStage;
 
     args = getParameters().getRaw();
@@ -91,15 +84,15 @@ public class JavaFx extends Application {
 
     screenRect = Screen.getPrimary().getVisualBounds();
 
-    BorderPane Root = new BorderPane();
+    final BorderPane Root = new BorderPane();
 
-    BackgroundFill bgfill = new BackgroundFill(Color.rgb(0, 0, 64), null, null);
+    final BackgroundFill bgfill = new BackgroundFill(Color.rgb(0, 0, 64), null, null);
     Root.setBackground(new Background(bgfill));
 
     // Setup Device //
 
     int argCount = 0;
-    for (String arg : args) {
+    for (final String arg : args) {
       argCount++;
       System.out.print("Args: ");
       System.out.println(arg);
@@ -135,22 +128,19 @@ public class JavaFx extends Application {
         frames[0].getPixelWriter(), frames[1].getPixelWriter()
     };
 
-    Runnable painter = new Runnable() {
-
-      public void run() {
-        if (needsUpdated) {
-          for (int y = 0; y < lcdHeight; y++) {
-            for (int x = 0; x < lcdWidth; x++) {
-              pixelwriters[currentFrame].setArgb(x, y, mobilelcd.getRGB(x, y));
-            }
+    final Runnable painter = () -> {
+      if (needsUpdated) {
+        for (int y = 0; y < lcdHeight; y++) {
+          for (int x = 0; x < lcdWidth; x++) {
+            pixelwriters[currentFrame].setArgb(x, y, mobilelcd.getRGB(x, y));
           }
-          lcdview.setImage(frames[currentFrame]);
-          if (currentFrame > 0) {
-            currentFrame = 0;
-          }
-          else {
-            currentFrame = 1;
-          }
+        }
+        lcdview.setImage(frames[currentFrame]);
+        if (currentFrame > 0) {
+          currentFrame = 0;
+        }
+        else {
+          currentFrame = 1;
         }
       }
     };
@@ -174,19 +164,19 @@ public class JavaFx extends Application {
     });
 
     lcdview.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
-      double x = e.getX();
-      double y = e.getY();
-      double rw = lcdWidth / lcdview.getFitWidth();
-      double rh = lcdHeight / lcdview.getFitHeight();
+      final double x = e.getX();
+      final double y = e.getY();
+      final double rw = lcdWidth / lcdview.getFitWidth();
+      final double rh = lcdHeight / lcdview.getFitHeight();
 
       Mobile.getPlatform().pointerPressed((int)(x * rw), (int)(y * rh));
     });
 
     lcdview.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
-      double x = e.getX();
-      double y = e.getY();
-      double rw = lcdWidth / lcdview.getFitWidth();
-      double rh = lcdHeight / lcdview.getFitHeight();
+      final double x = e.getX();
+      final double y = e.getY();
+      final double rw = lcdWidth / lcdview.getFitWidth();
+      final double rh = lcdHeight / lcdview.getFitHeight();
 
       Mobile.getPlatform().pointerReleased((int)(x * rw), (int)(y * rh));
     });
@@ -203,8 +193,8 @@ public class JavaFx extends Application {
   }
 
   private void setLCDViewSize() {
-    double vw = stage.getWidth() * 0.9;
-    double vh = stage.getHeight() * 0.9;
+    final double vw = stage.getWidth() * 0.9;
+    final double vh = stage.getHeight() * 0.9;
 
     double max = vh;
     if (vh > vw) {
@@ -213,15 +203,15 @@ public class JavaFx extends Application {
 
     if (lcdWidth < lcdHeight) {
       lcdview.setFitHeight(max);
-      lcdview.setFitWidth(max * ((double)lcdWidth) / ((double)lcdHeight));
+      lcdview.setFitWidth((max * (lcdWidth)) / (lcdHeight));
     }
     else {
       lcdview.setFitWidth(max);
-      lcdview.setFitHeight(max * ((double)lcdHeight) / ((double)lcdWidth));
+      lcdview.setFitHeight((max * (lcdHeight)) / (lcdWidth));
     }
-  };
+  }
 
-  private int findKeyCode(KeyCode code) {
+  private int findKeyCode(final KeyCode code) {
     if (code == KeyCode.DIGIT0) { return Mobile.KEY_NUM0; }
     if (code == KeyCode.DIGIT1) { return Mobile.KEY_NUM1; }
     if (code == KeyCode.DIGIT2) { return Mobile.KEY_NUM2; }

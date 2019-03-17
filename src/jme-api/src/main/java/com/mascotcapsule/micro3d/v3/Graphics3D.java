@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package com.mascotcapsule.micro3d.v3;
 
@@ -67,31 +67,31 @@ public class Graphics3D {
   public static final int PDATA_POINT_SPRITE_PARAMS_PER_VERTEX = 48;
   public static final int PDATA_TEXURE_COORD = 48;
 
-  public void renderPrimitives(Texture tex, int p1, int p2, FigureLayout figLayout, Effect3D e3d, int p3, int p4, int[] p5, int[] p6, int[] p7, int[] p8) {
+  public void renderPrimitives(final Texture tex, final int p1, final int p2, final FigureLayout figLayout, final Effect3D e3d, final int p3, final int p4, final int[] p5, final int[] p6, final int[] p7, final int[] p8) {
   }
 
-  public void renderPrimitives(Figure fig, int p1, int p2, FigureLayout figLayout, Effect3D paramEffect3D, int p3, int p4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
+  public void renderPrimitives(final Figure fig, final int p1, final int p2, final FigureLayout figLayout, final Effect3D paramEffect3D, final int p3, final int p4, final int[] paramArrayOfInt1, final int[] paramArrayOfInt2, final int[] paramArrayOfInt3, final int[] paramArrayOfInt4) {
   }
 
-  public void drawCommandList(Figure fig, int p1, int p2, FigureLayout figLayout, Effect3D e3d, int[] p3) {
+  public void drawCommandList(final Figure fig, final int p1, final int p2, final FigureLayout figLayout, final Effect3D e3d, final int[] p3) {
   }
 
-  public void renderFigure(Figure fig, int p1, int p2, FigureLayout figLayout, Effect3D e3d) {
+  public void renderFigure(final Figure fig, final int p1, final int p2, final FigureLayout figLayout, final Effect3D e3d) {
   }
 
   public void flush() {
   }
 
-  public void drawFigure(Figure fig, int p1, int p2, FigureLayout figLayout, Effect3D e3d) {
+  public void drawFigure(final Figure fig, final int p1, final int p2, final FigureLayout figLayout, final Effect3D e3d) {
   }
 
   public void dispose() {
   }
 
-  public void bind(Graphics g) {
+  public void bind(final Graphics g) {
   }
 
-  public void release(Graphics g) {
+  public void release(final Graphics g) {
   }
 
 }

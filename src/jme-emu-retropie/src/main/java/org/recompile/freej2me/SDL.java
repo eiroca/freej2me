@@ -1,14 +1,14 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
@@ -20,7 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.recompile.mobile.Mobile;
 
-class SDL {
+public class SDL {
 
   private Timer keytimer;
   private TimerTask keytask;
@@ -29,7 +29,7 @@ class SDL {
   private InputStream keys;
   public OutputStream frame;
 
-  public void start(String args[]) {
+  public void start(final String args[]) {
     try {
       args[0] = "/usr/local/bin/sdl_interface";
       proc = new ProcessBuilder(args).start();
@@ -41,7 +41,7 @@ class SDL {
       keytask = new SDLKeyTimerTask();
       keytimer.schedule(keytask, 0, 5);
     }
-    catch (Exception e) {
+    catch (final Exception e) {
       System.out.println("Failed to start sdl_interface");
       System.out.println(e.getMessage());
       System.exit(0);
@@ -56,10 +56,11 @@ class SDL {
   private class SDLKeyTimerTask extends TimerTask {
 
     private int bin;
-    private byte[] din = new byte[6];
+    private final byte[] din = new byte[6];
     private int count = 0;
     private int code;
 
+    @Override
     public void run() {
       try // to read keys
       {
@@ -97,12 +98,12 @@ class SDL {
           }
         }
       }
-      catch (Exception e) {
+      catch (final Exception e) {
       }
     }
   } // timer
 
-  private int getMobileKey(int keycode) {
+  private int getMobileKey(final int keycode) {
     switch (keycode) {
       case 0x30:
         return Mobile.KEY_NUM0;
@@ -189,12 +190,12 @@ class SDL {
         case : return Mobile.GAME_LEFT;
         case : return Mobile.GAME_RIGHT;
         case : return Mobile.GAME_FIRE;
-        
+
         case : return Mobile.GAME_A;
         case : return Mobile.GAME_B;
         case : return Mobile.GAME_C;
         case : return Mobile.GAME_D;
-        
+
         // Nokia //
         case : return Mobile.NOKIA_UP;
         case : return Mobile.NOKIA_DOWN;
@@ -208,7 +209,7 @@ class SDL {
     return keycode;
   }
 
-  private int getMobileKeyPad(int keycode) {
+  private int getMobileKeyPad(final int keycode) {
     switch (keycode) {
       //  A:1 B:0 X: 3 Y:2 L:4 R:5 St:6 Sl:7
       case 0x03:
@@ -233,7 +234,7 @@ class SDL {
     return keycode;
   }
 
-  private int getMobileKeyJoy(int keycode) {
+  private int getMobileKeyJoy(final int keycode) {
     switch (keycode) {
       case 0x04:
         return Mobile.KEY_NUM2;

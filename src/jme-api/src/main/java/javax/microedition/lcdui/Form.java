@@ -1,66 +1,64 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
 import org.recompile.mobile.Mobile;
 import org.recompile.mobile.PlatformImage;
-import org.recompile.mobile.PlatformGraphics;
-import java.util.ArrayList;
 
 public class Form extends Screen {
 
   public ItemStateListener listener;
 
-  public Form(String title) {
+  public Form(final String title) {
     setTitle(title);
     platformImage = new PlatformImage(width, height);
     render();
   }
 
-  public Form(String title, Item[] itemarray) {
+  public Form(final String title, final Item[] itemarray) {
     setTitle(title);
 
     if (items != null) {
-      for (int i = 0; i < itemarray.length; i++) {
-        items.add(itemarray[i]);
+      for (final Item element : itemarray) {
+        items.add(element);
       }
     }
     platformImage = new PlatformImage(width, height);
     render();
   }
 
-  public int append(Image img) {
+  public int append(final Image img) {
     items.add(new ImageItem("", img, 0, ""));
     render();
     return items.size() - 1;
   }
 
-  public int append(Item item) {
+  public int append(final Item item) {
     items.add(item);
     render();
     return items.size() - 1;
   }
 
-  public int append(String str) {
+  public int append(final String str) {
     items.add(new StringItem("", str));
     render();
     return items.size() - 1;
   }
 
-  public void delete(int itemNum) {
+  public void delete(final int itemNum) {
     items.remove(itemNum);
     render();
   }
@@ -70,29 +68,31 @@ public class Form extends Screen {
     render();
   }
 
-  public Item get(int itemNum) {
+  public Item get(final int itemNum) {
     return items.get(itemNum);
   }
 
+  @Override
   public int getHeight() {
     return 128;
   }
 
+  @Override
   public int getWidth() {
     return 64;
   }
 
-  public void insert(int itemNum, Item item) {
+  public void insert(final int itemNum, final Item item) {
     items.add(itemNum, item);
     render();
   }
 
-  public void set(int itemNum, Item item) {
+  public void set(final int itemNum, final Item item) {
     items.set(itemNum, item);
     render();
   }
 
-  public void setItemStateListener(ItemStateListener iListener) {
+  public void setItemStateListener(final ItemStateListener iListener) {
     listener = iListener;
   }
 
@@ -104,7 +104,8 @@ public class Form extends Screen {
   	Draw form, handle input
   */
 
-  public void keyPressed(int key) {
+  @Override
+  public void keyPressed(final int key) {
     if (listCommands == true) {
       keyPressedCommands(key);
       return;
@@ -143,6 +144,7 @@ public class Form extends Screen {
     render();
   }
 
+  @Override
   public void notifySetCurrent() {
     render();
   }

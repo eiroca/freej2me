@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package com.mascotcapsule.micro3d.v3;
 
@@ -36,14 +36,14 @@ public class Effect3D {
   public Effect3D() {
   }
 
-  public Effect3D(Light light, int shading, boolean isEnableTrans, Texture tex) {
+  public Effect3D(final Light light, final int shading, final boolean isEnableTrans, final Texture tex) {
   }
 
   public final Light getLight() {
     return light;
   }
 
-  public final void setLight(Light light1) {
+  public final void setLight(final Light light1) {
     light = light1;
   }
 
@@ -55,11 +55,11 @@ public class Effect3D {
     return shading;
   }
 
-  public final void setShading(int value) {
+  public final void setShading(final int value) {
     shading = value;
   }
 
-  public final void setShadingType(int value) {
+  public final void setShadingType(final int value) {
     shading = value;
   }
 
@@ -87,14 +87,14 @@ public class Effect3D {
     return toonthresholdlow;
   }
 
-  public final void setThreshold(int i, int j, int k) // unknown order
+  public final void setThreshold(final int i, final int j, final int k) // unknown order
   {
     threshold = i;
     thresholdlow = j;
     thresholdhigh = k;
   }
 
-  public final void setToonParams(int i, int j, int k) {
+  public final void setToonParams(final int i, final int j, final int k) {
     toonthreshold = i;
     toonthresholdlow = j;
     toonthresholdhigh = k;
@@ -108,11 +108,11 @@ public class Effect3D {
     return false;
   }
 
-  public final void setSemiTransparentEnabled(boolean value) {
+  public final void setSemiTransparentEnabled(final boolean value) {
     strans = value;
   }
 
-  public final void setTransparency(boolean value) {
+  public final void setTransparency(final boolean value) {
     trans = value;
   }
 
@@ -124,11 +124,11 @@ public class Effect3D {
     return sphereTex;
   }
 
-  public final void setSphereMap(Texture map) {
+  public final void setSphereMap(final Texture map) {
     sphereMap = map;
   }
 
-  public final void setSphereTexture(Texture texture) {
+  public final void setSphereTexture(final Texture texture) {
     sphereTex = texture;
   }
 

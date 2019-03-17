@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -29,7 +29,7 @@ public class Material extends Object3D {
   public Material() {
   }
 
-  public int getColor(int target) {
+  public int getColor(final int target) {
     return color;
   }
 
@@ -41,15 +41,15 @@ public class Material extends Object3D {
     return tracking;
   }
 
-  public void setColor(int target, int ARGB) {
+  public void setColor(final int target, final int ARGB) {
     color = ARGB;
   }
 
-  public void setShininess(float shininess) {
+  public void setShininess(final float shininess) {
     shine = shininess;
   }
 
-  public void setVertexColorTrackingEnable(boolean enable) {
+  public void setVertexColorTrackingEnable(final boolean enable) {
     tracking = enable;
   }
 

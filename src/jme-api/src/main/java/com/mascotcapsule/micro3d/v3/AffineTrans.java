@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 
 package com.mascotcapsule.micro3d.v3;
@@ -38,7 +38,7 @@ public class AffineTrans {
   public AffineTrans() {
   }
 
-  public AffineTrans(int m00, int m01, int m02, int m03, int m10, int m11, int m12, int m13, int m20, int m21, int m22, int m23) {
+  public AffineTrans(final int m00, final int m01, final int m02, final int m03, final int m10, final int m11, final int m12, final int m13, final int m20, final int m21, final int m22, final int m23) {
     this.m00 = m00;
     this.m01 = m01;
     this.m02 = m02;
@@ -53,7 +53,7 @@ public class AffineTrans {
     this.m23 = m23;
   }
 
-  public AffineTrans(AffineTrans a) {
+  public AffineTrans(final AffineTrans a) {
     m00 = a.m00;
     m01 = a.m01;
     m02 = a.m02;
@@ -68,7 +68,7 @@ public class AffineTrans {
     m23 = a.m23;
   }
 
-  public AffineTrans(int[][] a) {
+  public AffineTrans(final int[][] a) {
     m00 = a[0][0];
     m01 = a[0][1];
     m02 = a[0][2];
@@ -83,7 +83,7 @@ public class AffineTrans {
     m23 = a[2][3];
   }
 
-  public AffineTrans(int[] a) {
+  public AffineTrans(final int[] a) {
     m00 = a[0];
     m01 = a[1];
     m02 = a[2];
@@ -98,7 +98,7 @@ public class AffineTrans {
     m23 = a[11];
   }
 
-  public AffineTrans(int[] a, int offset) {
+  public AffineTrans(final int[] a, final int offset) {
     m00 = a[offset + 0];
     m01 = a[offset + 1];
     m02 = a[offset + 2];
@@ -114,7 +114,7 @@ public class AffineTrans {
 
   }
 
-  public final void get(int[] a) {
+  public final void get(final int[] a) {
     a[0] = m00;
     a[1] = m01;
     a[2] = m02;
@@ -129,7 +129,7 @@ public class AffineTrans {
     a[11] = m23;
   }
 
-  public final void get(int[] a, int offset) {
+  public final void get(final int[] a, final int offset) {
     a[offset + 0] = m00;
     a[offset + 1] = m01;
     a[offset + 2] = m02;
@@ -144,7 +144,7 @@ public class AffineTrans {
     a[offset + 11] = m23;
   }
 
-  public final void set(int[] a, int offset) {
+  public final void set(final int[] a, final int offset) {
     m00 = a[offset + 0];
     m01 = a[offset + 1];
     m02 = a[offset + 2];
@@ -159,7 +159,7 @@ public class AffineTrans {
     m23 = a[offset + 11];
   }
 
-  public final void set(int m00, int m01, int m02, int m03, int m10, int m11, int m12, int m13, int m20, int m21, int m22, int m23) {
+  public final void set(final int m00, final int m01, final int m02, final int m03, final int m10, final int m11, final int m12, final int m13, final int m20, final int m21, final int m22, final int m23) {
     this.m00 = m00;
     this.m01 = m01;
     this.m02 = m02;
@@ -174,7 +174,7 @@ public class AffineTrans {
     this.m23 = m23;
   }
 
-  public final void set(AffineTrans a) {
+  public final void set(final AffineTrans a) {
     m00 = a.m00;
     m01 = a.m01;
     m02 = a.m02;
@@ -189,7 +189,7 @@ public class AffineTrans {
     m23 = a.m23;
   }
 
-  public final void set(int[][] a) {
+  public final void set(final int[][] a) {
     m00 = a[0][0];
     m01 = a[0][1];
     m02 = a[0][2];
@@ -204,7 +204,7 @@ public class AffineTrans {
     m23 = a[2][3];
   }
 
-  public final void set(int[] a) {
+  public final void set(final int[] a) {
     m00 = a[0];
     m01 = a[1];
     m02 = a[2];
@@ -219,66 +219,66 @@ public class AffineTrans {
     m23 = a[11];
   }
 
-  public final Vector3D transPoint(Vector3D v) {
+  public final Vector3D transPoint(final Vector3D v) {
     return v; // ?
   }
 
-  public final Vector3D transform(Vector3D v) {
+  public final Vector3D transform(final Vector3D v) {
     return v; // ?
   }
 
-  public final void multiply(AffineTrans a) {
+  public final void multiply(final AffineTrans a) {
     mul(a);
   }
 
-  public final void mul(AffineTrans a) {
+  public final void mul(final AffineTrans a) {
     // big multiply function goes here
   }
 
-  public final void multiply(AffineTrans a1, AffineTrans a2) {
+  public final void multiply(final AffineTrans a1, final AffineTrans a2) {
     mul(a1, a2);
   }
 
-  public final void mul(AffineTrans a1, AffineTrans a2) {
+  public final void mul(final AffineTrans a1, final AffineTrans a2) {
   }
 
-  public final void setRotationX(int x) {
+  public final void setRotationX(final int x) {
     rotx = x;
   }
 
-  public final void setRotationY(int y) {
+  public final void setRotationY(final int y) {
     roty = y;
   }
 
-  public final void setRotationZ(int z) {
+  public final void setRotationZ(final int z) {
     rotz = z;
   }
 
   public final void setIdentity() {
   }
 
-  public final void rotationX(int x) {
+  public final void rotationX(final int x) {
     rotx = x;
   }
 
-  public final void rotationY(int y) {
+  public final void rotationY(final int y) {
     roty = y;
   }
 
-  public final void rotationZ(int z) {
+  public final void rotationZ(final int z) {
     rotz = z;
   }
 
-  public final void rotationV(Vector3D vector3d, int i) {
+  public final void rotationV(final Vector3D vector3d, final int i) {
   }
 
-  public final void setRotation(Vector3D vector3d, int i) {
+  public final void setRotation(final Vector3D vector3d, final int i) {
   }
 
-  public final void setViewTrans(Vector3D vector3d, Vector3D vector3d1, Vector3D vector3d2) {
+  public final void setViewTrans(final Vector3D vector3d, final Vector3D vector3d1, final Vector3D vector3d2) {
   }
 
-  public final void lookAt(Vector3D vector3d, Vector3D vector3d1, Vector3D vector3d2) {
+  public final void lookAt(final Vector3D vector3d, final Vector3D vector3d1, final Vector3D vector3d2) {
   }
 
 }

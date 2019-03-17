@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -26,29 +26,29 @@ public class Image2D extends Object3D {
   private byte[] image;
   private int width = 0;
   private int height = 0;
-  private int format = RGB;
+  private int format = Image2D.RGB;
 
-  public Image2D(int fmt, int w, int h) {
+  public Image2D(final int fmt, final int w, final int h) {
     width = w;
     height = h;
     format = fmt;
   }
 
-  public Image2D(int fmt, int w, int h, byte[] img) {
-    width = w;
-    height = h;
-    format = fmt;
-    image = img;
-  }
-
-  public Image2D(int fmt, int w, int h, byte[] img, byte[] Palette) {
+  public Image2D(final int fmt, final int w, final int h, final byte[] img) {
     width = w;
     height = h;
     format = fmt;
     image = img;
   }
 
-  public Image2D(int fmt, Object img) {
+  public Image2D(final int fmt, final int w, final int h, final byte[] img, final byte[] Palette) {
+    width = w;
+    height = h;
+    format = fmt;
+    image = img;
+  }
+
+  public Image2D(final int fmt, final Object img) {
     format = fmt;
     /*image=(byte[])img;*/ }
 
@@ -68,7 +68,7 @@ public class Image2D extends Object3D {
     return true;
   }
 
-  public void set(int x, int y, int w, int h, byte[] img) {
+  public void set(final int x, final int y, final int w, final int h, final byte[] img) {
     width = w;
     height = h;
     image = img;

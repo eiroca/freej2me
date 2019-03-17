@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -66,29 +66,29 @@ public class Light extends Node {
     return exponent;
   }
 
-  public void setAttenuation(float c, float l, float q) {
+  public void setAttenuation(final float c, final float l, final float q) {
     constant = c;
     linear = l;
     quadratic = q;
   }
 
-  public void setColor(int RGB) {
+  public void setColor(final int RGB) {
     color = RGB;
   }
 
-  public void setIntensity(float value) {
+  public void setIntensity(final float value) {
     intensity = value;
   }
 
-  public void setMode(int value) {
+  public void setMode(final int value) {
     mode = value;
   }
 
-  public void setSpotAngle(float theta) {
+  public void setSpotAngle(final float theta) {
     angle = theta;
   }
 
-  public void setSpotExponent(float exp) {
+  public void setSpotExponent(final float exp) {
     exponent = exp;
   }
 

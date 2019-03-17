@@ -1,24 +1,24 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
 import java.util.ArrayList;
 import org.recompile.mobile.Mobile;
-import org.recompile.mobile.PlatformImage;
 import org.recompile.mobile.PlatformGraphics;
+import org.recompile.mobile.PlatformImage;
 
 public abstract class Displayable {
 
@@ -32,9 +32,9 @@ public abstract class Displayable {
 
   protected String title = "";
 
-  protected ArrayList<Command> commands = new ArrayList<Command>();
+  protected ArrayList<Command> commands = new ArrayList<>();
 
-  protected ArrayList<Item> items = new ArrayList<Item>();
+  protected ArrayList<Item> items = new ArrayList<>();
 
   protected CommandListener commandlistener;
 
@@ -51,16 +51,16 @@ public abstract class Displayable {
     height = Mobile.getPlatform().lcdHeight;
   }
 
-  public void addCommand(Command cmd) {
+  public void addCommand(final Command cmd) {
     try {
       commands.add(cmd);
     }
-    catch (Exception e) {
-      System.out.println("Problem Adding Command: " + e.getMessage());
+    catch (final Exception e) {
+      Mobile.warn("Problem Adding Command: " + e.getMessage());
     }
   }
 
-  public void removeCommand(Command cmd) {
+  public void removeCommand(final Command cmd) {
     commands.remove(cmd);
   }
 
@@ -76,7 +76,7 @@ public abstract class Displayable {
     return title;
   }
 
-  public void setTitle(String text) {
+  public void setTitle(final String text) {
     title = text;
   }
 
@@ -88,15 +88,15 @@ public abstract class Displayable {
     return ticker;
   }
 
-  public void setTicker(Ticker tick) {
+  public void setTicker(final Ticker tick) {
     ticker = tick;
   }
 
-  public void setCommandListener(CommandListener listener) {
+  public void setCommandListener(final CommandListener listener) {
     commandlistener = listener;
   }
 
-  protected void sizeChanged(int width, int height) {
+  protected void sizeChanged(final int width, final int height) {
   }
 
   public Display getDisplay() {
@@ -107,19 +107,19 @@ public abstract class Displayable {
     return commands;
   }
 
-  public void keyPressed(int key) {
+  public void keyPressed(final int key) {
   }
 
-  public void keyReleased(int key) {
+  public void keyReleased(final int key) {
   }
 
-  public void pointerDragged(int x, int y) {
+  public void pointerDragged(final int x, final int y) {
   }
 
-  public void pointerPressed(int x, int y) {
+  public void pointerPressed(final int x, final int y) {
   }
 
-  public void pointerReleased(int x, int y) {
+  public void pointerReleased(final int x, final int y) {
   }
 
   public void showNotify() {
@@ -141,7 +141,7 @@ public abstract class Displayable {
   }
 
   public void renderItems() {
-    PlatformGraphics gc = platformImage.getGraphics();
+    final PlatformGraphics gc = platformImage.getGraphics();
     // Draw Background:
     gc.setColor(0xFFFFFF);
     gc.fillRect(0, 0, width, height);
@@ -157,7 +157,7 @@ public abstract class Displayable {
         currentItem = 0;
       }
       // Draw list items //
-      int ah = height - 50; // allowed height
+      final int ah = height - 50; // allowed height
       int max = (int)Math.floor(ah / 15); // max items per page
       if (items.size() < max) {
         max = items.size();
@@ -165,8 +165,8 @@ public abstract class Displayable {
 
       int page = 0;
       page = (int)Math.floor(currentItem / max); // current page
-      int first = page * max; // first item to show
-      int last = first + max - 1;
+      final int first = page * max; // first item to show
+      int last = (first + max) - 1;
 
       if (last >= items.size()) {
         last = items.size() - 1;
@@ -182,10 +182,10 @@ public abstract class Displayable {
           gc.setColor(0x000000);
         }
         if (items.get(i) instanceof StringItem) {
-          __drawString((StringItem)items.get(i), gc, y, width, 15);
+          Displayable.__drawString((StringItem)items.get(i), gc, y, width, 15);
         }
         else if (items.get(i) instanceof ImageItem) {
-          __drawImage((ImageItem)items.get(i), gc, y, width, 15);
+          Displayable.__drawImage((ImageItem)items.get(i), gc, y, width, 15);
         }
         else {
           gc.drawString(items.get(i).getLabel(), width / 2, y, Graphics.HCENTER);
@@ -209,13 +209,13 @@ public abstract class Displayable {
         gc.drawString("Options", 3, height - 17, Graphics.LEFT);
     }
 
-    if (this.getDisplay().getCurrent() == this) {
+    if (getDisplay().getCurrent() == this) {
       Mobile.getPlatform().repaint(platformImage, 0, 0, width, height);
     }
   }
 
   protected void renderCommands() {
-    PlatformGraphics gc = platformImage.getGraphics();
+    final PlatformGraphics gc = platformImage.getGraphics();
 
     // Draw Background:
     gc.setColor(0xFFFFFF);
@@ -232,16 +232,16 @@ public abstract class Displayable {
         currentCommand = 0;
       }
       // Draw commands //
-      int ah = height - 50; // allowed height
-      int max = (int)Math.floor(ah / 15); // max items per page			
+      final int ah = height - 50; // allowed height
+      int max = (int)Math.floor(ah / 15); // max items per page
       if (commands.size() < max) {
         max = commands.size();
       }
 
       int page = 0;
       page = (int)Math.floor(currentCommand / max); // current page
-      int first = page * max; // first item to show
-      int last = first + max - 1;
+      final int first = page * max; // first item to show
+      int last = (first + max) - 1;
 
       if (last >= commands.size()) {
         last = commands.size() - 1;
@@ -263,12 +263,12 @@ public abstract class Displayable {
     gc.drawString("Okay", 3, height - 17, Graphics.LEFT);
     gc.drawString("Back", width - 3, height - 17, Graphics.RIGHT);
 
-    if (this.getDisplay().getCurrent() == this) {
+    if (getDisplay().getCurrent() == this) {
       Mobile.getPlatform().repaint(platformImage, 0, 0, width, height);
     }
   }
 
-  protected void keyPressedCommands(int key) {
+  protected void keyPressedCommands(final int key) {
     switch (key) {
       case Mobile.KEY_NUM2:
         currentCommand--;
@@ -303,8 +303,8 @@ public abstract class Displayable {
     }
   }
 
-  protected void doCommand(int index) {
-    if (index >= 0 && commands.size() > index) {
+  protected void doCommand(final int index) {
+    if ((index >= 0) && (commands.size() > index)) {
       if (commandlistener != null) {
         commandlistener.commandAction(commands.get(index), this);
       }
@@ -328,7 +328,7 @@ public abstract class Displayable {
       return;
     }
     else {
-      if (commands.size() > 0 && commands.size() <= 2) {
+      if ((commands.size() > 0) && (commands.size() <= 2)) {
         doCommand(0);
       }
     }
@@ -341,21 +341,21 @@ public abstract class Displayable {
       render();
     }
     else {
-      if (commands.size() > 0 && commands.size() <= 2) {
+      if ((commands.size() > 0) && (commands.size() <= 2)) {
         doCommand(1);
       }
     }
   }
 
-  public static void __drawString(StringItem si, PlatformGraphics gc, int y, int sx, int sy) {
+  public static void __drawString(final StringItem si, final PlatformGraphics gc, final int y, final int sx, final int sy) {
     gc.drawString(si.getLabel(), sx / 2, y, Graphics.HCENTER);
     gc.drawString(si.getText(), sx / 2, y, Graphics.HCENTER);
   }
 
-  public static void __drawImage(ImageItem imageItem, PlatformGraphics gc, int y, int sx, int sy) {
-    Image im = imageItem.getImage();
-    int isw = im.getWidth();
-    int isy = im.getHeight();
+  public static void __drawImage(final ImageItem imageItem, final PlatformGraphics gc, final int y, final int sx, final int sy) {
+    final Image im = imageItem.getImage();
+    final int isw = im.getWidth();
+    final int isy = im.getHeight();
     int px1;
     int px2;
     int py1;

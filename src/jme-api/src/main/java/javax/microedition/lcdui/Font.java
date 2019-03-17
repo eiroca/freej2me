@@ -1,21 +1,20 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
-import org.recompile.mobile.Mobile;
 import org.recompile.mobile.PlatformFont;
 
 public final class Font {
@@ -36,24 +35,24 @@ public final class Font {
   public static final int STYLE_PLAIN = 0;
   public static final int STYLE_UNDERLINED = 4;
 
-  private int face;
-  private int style;
-  private int size;
+  private final int face;
+  private final int style;
+  private final int size;
 
   private static Font defaultFont = new Font(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
 
   public PlatformFont platformFont;
 
-  private Font(int fontFace, int fontStyle, int fontSize) {
+  private Font(final int fontFace, final int fontStyle, final int fontSize) {
     face = fontFace;
     style = fontStyle;
     size = fontSize;
     platformFont = new PlatformFont(this);
   }
 
-  public int charsWidth(char[] ch, int offset, int length) {
+  public int charsWidth(final char[] ch, final int offset, final int length) {
     int len = 0;
-    for (int i = offset; i < ch.length + length; i++) {
+    for (int i = offset; i < (ch.length + length); i++) {
       if (i < ch.length) {
         len += charWidth(ch[i]);
       }
@@ -61,7 +60,7 @@ public final class Font {
     return len;
   }
 
-  public int charWidth(char ch) {
+  public int charWidth(final char ch) {
     return stringWidth(String.valueOf(ch));
   }
 
@@ -70,18 +69,18 @@ public final class Font {
   }
 
   public static Font getDefaultFont() {
-    return defaultFont;
+    return Font.defaultFont;
   }
 
   public int getFace() {
     return face;
   }
 
-  public static Font getFont(int fontSpecifier) {
-    return defaultFont;
+  public static Font getFont(final int fontSpecifier) {
+    return Font.defaultFont;
   }
 
-  public static Font getFont(int face, int style, int size) {
+  public static Font getFont(final int face, final int style, final int size) {
     return new Font(face, style, size);
   }
 
@@ -102,30 +101,30 @@ public final class Font {
   }
 
   public boolean isBold() {
-    return (style & STYLE_BOLD) == STYLE_BOLD;
+    return (style & Font.STYLE_BOLD) == Font.STYLE_BOLD;
   }
 
   public boolean isItalic() {
-    return (style & STYLE_ITALIC) == STYLE_ITALIC;
+    return (style & Font.STYLE_ITALIC) == Font.STYLE_ITALIC;
   }
 
   public boolean isPlain() {
-    return style == STYLE_PLAIN;
+    return style == Font.STYLE_PLAIN;
   }
 
   public boolean isUnderlined() {
-    return (style & STYLE_UNDERLINED) == STYLE_UNDERLINED;
+    return (style & Font.STYLE_UNDERLINED) == Font.STYLE_UNDERLINED;
   }
 
-  public int stringWidth(String str) {
+  public int stringWidth(final String str) {
     return platformFont.stringWidth(str);
   }
 
-  public int substringWidth(String str, int offset, int len) {
+  public int substringWidth(final String str, final int offset, final int len) {
     return stringWidth(str.substring(offset, offset + len));
   }
 
-  private int convertSize(int size) {
+  private int convertSize(final int size) {
     switch (size) {
       case SIZE_LARGE:
         return 14;

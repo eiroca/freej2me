@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -67,32 +67,32 @@ public class CompositingMode extends Object3D {
     return depthWrite;
   }
 
-  public void setAlphaThreshold(float threshold) {
+  public void setAlphaThreshold(final float threshold) {
     alphaThreshold = threshold;
   }
 
-  public void setAlphaWriteEnable(boolean enable) {
+  public void setAlphaWriteEnable(final boolean enable) {
     alphaWrite = enable;
   }
 
-  public void setBlending(int mode) {
+  public void setBlending(final int mode) {
     blending = mode;
   }
 
-  public void setColorWriteEnable(boolean enable) {
+  public void setColorWriteEnable(final boolean enable) {
     colorWrite = enable;
   }
 
-  public void setDepthOffset(float factor, float units) {
+  public void setDepthOffset(final float factor, final float units) {
     depthOffsetFactor = factor;
     depthOffsetUnits = units;
   }
 
-  public void setDepthTestEnable(boolean enable) {
+  public void setDepthTestEnable(final boolean enable) {
     depthTest = enable;
   }
 
-  public void setDepthWriteEnable(boolean enable) {
+  public void setDepthWriteEnable(final boolean enable) {
     depthWrite = enable;
   }
 

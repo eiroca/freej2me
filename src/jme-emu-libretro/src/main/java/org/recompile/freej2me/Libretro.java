@@ -1,14 +1,14 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
@@ -22,24 +22,28 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.recompile.mobile.Mobile;
 import org.recompile.mobile.MobilePlatform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Libretro {
+
+  private static Logger logger = LoggerFactory.getLogger(Libretro.class);
 
   private int lcdWidth;
   private int lcdHeight;
 
-  private Runnable painter;
+  private final Runnable painter;
 
   private BufferedImage surface;
   private Graphics2D gc;
 
-  private Config config;
+  private final Config config;
   private boolean useNokiaControls = true;
   private boolean rotateDisplay = false;
   private int limitFPS = 0;
 
-  private byte[] frameBuffer = new byte[800 * 800 * 3];
-  private byte[] frameHeader = new byte[] {
+  private final byte[] frameBuffer = new byte[800 * 800 * 3];
+  private final byte[] frameHeader = new byte[] {
       (byte)0xFE, 0, 0, 0, 0, 0
   };
 
@@ -48,8 +52,8 @@ public class Libretro {
 
   LibretroIO lio;
 
-  public static void main(String args[]) {
-    Libretro app = new Libretro();
+  public static void main(final String args[]) {
+    new Libretro();
   }
 
   public Libretro() {
@@ -62,32 +66,22 @@ public class Libretro {
     Mobile.setPlatform(new MobilePlatform(lcdWidth, lcdHeight));
 
     config = new Config();
-    config.onChange = new Runnable() {
-
-      public void run() {
-        settingsChanged();
-      }
-    };
+    config.onChange = () -> settingsChanged();
 
     lio = new LibretroIO();
-
     lio.start();
 
-    painter = new Runnable() {
-
-      public void run() {
-        try {
-          gc.drawImage(Mobile.getPlatform().getLCD(), 0, 0, lcdWidth, lcdHeight, null);
-        }
-        catch (Exception e) {
-        }
+    painter = () -> {
+      try {
+        gc.drawImage(Mobile.getPlatform().getLCD(), 0, 0, lcdWidth, lcdHeight, null);
+      }
+      catch (final Exception e) {
       }
     };
 
     Mobile.getPlatform().setPainter(painter);
 
-    System.out.println("+READY");
-    System.out.flush();
+    Libretro.logger.info("+READY");
   }
 
   private class LibretroIO {
@@ -108,12 +102,13 @@ public class Libretro {
     private class LibretroTimerTask extends TimerTask {
 
       private int bin;
-      private int[] din = new int[5];
+      private final int[] din = new int[5];
       private int count = 0;
       private int code;
       private StringBuilder path;
       private URL url;
 
+      @Override
       public void run() {
         try // to read keys
         {
@@ -121,7 +116,7 @@ public class Libretro {
             bin = System.in.read();
             if (bin == -1) { return; }
             //System.out.print(" "+bin);
-            din[count] = (int)(bin & 0xFF);
+            din[count] = bin & 0xFF;
             count++;
             if (count == 5) {
               count = 0;
@@ -192,7 +187,7 @@ public class Libretro {
                     Mobile.getPlatform().runJar();
                   }
                   else {
-                    System.out.println("Couldn't load jar...");
+                    Libretro.logger.info("Couldn't load jar...");
                     System.exit(0);
                   }
                   break;
@@ -219,12 +214,12 @@ public class Libretro {
                         Thread.sleep(limitFPS);
                       }
                     }
-                    int bufferLength = data.length * 3;
+                    final int bufferLength = data.length * 3;
                     int cb = 0;
-                    for (int i = 0; i < data.length; i++) {
-                      frameBuffer[cb] = (byte)((data[i] >> 16) & 0xFF);
-                      frameBuffer[cb + 1] = (byte)((data[i] >> 8) & 0xFF);
-                      frameBuffer[cb + 2] = (byte)((data[i]) & 0xFF);
+                    for (final int element : data) {
+                      frameBuffer[cb] = (byte)((element >> 16) & 0xFF);
+                      frameBuffer[cb + 1] = (byte)((element >> 8) & 0xFF);
+                      frameBuffer[cb + 2] = (byte)((element) & 0xFF);
                       cb += 3;
                     }
                     //frameHeader[0] = (byte)0xFE;
@@ -237,19 +232,19 @@ public class Libretro {
                     System.out.write(frameBuffer, 0, bufferLength);
                     System.out.flush();
                   }
-                  catch (Exception e) {
-                    System.out.print("Error sending frame: " + e.getMessage());
+                  catch (final Exception e) {
+                    Libretro.logger.error("Error sending frame: " + e.getMessage());
                     System.exit(0);
                   }
 
                   break;
               }
-              //System.out.println(" ("+code+") <- Key");
+              //logger.info(" ("+code+") <- Key");
               //System.out.flush();
             }
           }
         }
-        catch (Exception e) {
+        catch (final Exception e) {
           System.exit(0);
         }
       }
@@ -257,15 +252,15 @@ public class Libretro {
   } // LibretroIO
 
   private void settingsChanged() {
-    int w = Integer.parseInt(config.settings.get("width"));
-    int h = Integer.parseInt(config.settings.get("height"));
+    final int w = Integer.parseInt(config.settings.get("width"));
+    final int h = Integer.parseInt(config.settings.get("height"));
 
     limitFPS = Integer.parseInt(config.settings.get("fps"));
     if (limitFPS > 0) {
       limitFPS = 1000 / limitFPS;
     }
 
-    String sound = config.settings.get("sound");
+    final String sound = config.settings.get("sound");
     if (sound.equals("on")) {
       Mobile.getPlatform().sound = true;
     }
@@ -273,7 +268,7 @@ public class Libretro {
       Mobile.getPlatform().sound = false;
     }
 
-    String nokia = config.settings.get("nokia");
+    final String nokia = config.settings.get("nokia");
     if (nokia.equals("on")) {
       useNokiaControls = true;
     }
@@ -281,7 +276,7 @@ public class Libretro {
       useNokiaControls = false;
     }
 
-    String rotate = config.settings.get("rotate");
+    final String rotate = config.settings.get("rotate");
     if (rotate.equals("on")) {
       rotateDisplay = true;
       frameHeader[5] = (byte)1;
@@ -291,7 +286,7 @@ public class Libretro {
       frameHeader[5] = (byte)0;
     }
 
-    if (lcdWidth != w || lcdHeight != h) {
+    if ((lcdWidth != w) || (lcdHeight != h)) {
       lcdWidth = w;
       lcdHeight = h;
       Mobile.getPlatform().resizeLCD(w, h);
@@ -300,7 +295,7 @@ public class Libretro {
     }
   }
 
-  private void keyDown(int key) {
+  private void keyDown(final int key) {
     if (config.isRunning) {
       config.keyPressed(key);
     }
@@ -309,13 +304,13 @@ public class Libretro {
     }
   }
 
-  private void keyUp(int key) {
+  private void keyUp(final int key) {
     if (!config.isRunning) {
       Mobile.getPlatform().keyReleased(key);
     }
   }
 
-  private int getMobileKey(int keycode) {
+  private int getMobileKey(final int keycode) {
     if (useNokiaControls) {
       switch (keycode) {
         case 273:
@@ -412,7 +407,7 @@ public class Libretro {
     return keycode;
   }
 
-  private int getMobileKeyJoy(int keycode) {
+  private int getMobileKeyJoy(final int keycode) {
     if (useNokiaControls) {
       switch (keycode) {
         case 0:

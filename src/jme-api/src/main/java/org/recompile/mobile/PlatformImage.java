@@ -1,32 +1,28 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
 package org.recompile.mobile;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.game.Sprite;
-import javax.microedition.lcdui.game.GameCanvas;
-import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Arrays;
+import javax.imageio.ImageIO;
+import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.game.Sprite;
 
 public class PlatformImage extends javax.microedition.lcdui.Image {
 
@@ -37,6 +33,7 @@ public class PlatformImage extends javax.microedition.lcdui.Image {
     return canvas;
   }
 
+  @Override
   public PlatformGraphics getGraphics() {
     return gc;
   }
@@ -46,7 +43,7 @@ public class PlatformImage extends javax.microedition.lcdui.Image {
     gc.setColor(0x000000);
   }
 
-  public PlatformImage(int Width, int Height) {
+  public PlatformImage(final int Width, final int Height) {
     // Create blank Image
     width = Width;
     height = Height;
@@ -61,57 +58,55 @@ public class PlatformImage extends javax.microedition.lcdui.Image {
     platformImage = this;
   }
 
-  public PlatformImage(String name) {
+  public PlatformImage(final String name) {
     // Create Image from resource name
-    // System.out.println("Image From Resource Name");
+    Mobile.debug("Image From Resource Name");
     BufferedImage temp;
-
-    InputStream stream = Mobile.getPlatform().loader.getMIDletResourceAsStream(name);
-
+    final InputStream stream = Mobile.getPlatform().loader.getMIDletResourceAsStream(name);
     if (stream == null) {
-      System.out.println("Couldn't Load Image Stream (can't find " + name + ")");
+      Mobile.log("Couldn't Load Image Stream (can't find " + name + ")");
     }
     else {
       try {
         temp = ImageIO.read(stream);
-        width = (int)temp.getWidth();
-        height = (int)temp.getHeight();
+        width = temp.getWidth();
+        height = temp.getHeight();
 
         canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         createGraphics();
 
         gc.drawImage(temp, 0, 0);
       }
-      catch (Exception e) {
-        System.out.println("Couldn't Load Image Stream " + name);
+      catch (final Exception e) {
+        Mobile.log("Couldn't Load Image Stream " + name);
         e.printStackTrace();
       }
     }
     platformImage = this;
   }
 
-  public PlatformImage(InputStream stream) {
+  public PlatformImage(final InputStream stream) {
     // Create Image from InputStream
-    // System.out.println("Image From Stream");
+    Mobile.debug("Image From Stream");
     BufferedImage temp;
     try {
       temp = ImageIO.read(stream);
-      width = (int)temp.getWidth();
-      height = (int)temp.getHeight();
+      width = temp.getWidth();
+      height = temp.getHeight();
 
       canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       createGraphics();
 
       gc.drawImage(temp, 0, 0);
     }
-    catch (Exception e) {
-      System.out.println("Couldn't Load Image Stream");
+    catch (final Exception e) {
+      Mobile.warn("Couldn't Load Image Stream");
     }
 
     platformImage = this;
   }
 
-  public PlatformImage(Image source) {
+  public PlatformImage(final Image source) {
     // Create Image from Image
     width = source.platformImage.width;
     height = source.platformImage.height;
@@ -124,34 +119,31 @@ public class PlatformImage extends javax.microedition.lcdui.Image {
     platformImage = this;
   }
 
-  public PlatformImage(byte[] imageData, int imageOffset, int imageLength) {
+  public PlatformImage(final byte[] imageData, final int imageOffset, final int imageLength) {
     // Create Image from Byte Array Range (Data is PNG, JPG, etc.)
     try {
-      byte[] range = Arrays.copyOfRange(imageData, imageOffset, imageOffset + imageLength);
-      InputStream stream = new ByteArrayInputStream(range);
+      final byte[] range = Arrays.copyOfRange(imageData, imageOffset, imageOffset + imageLength);
+      final InputStream stream = new ByteArrayInputStream(range);
 
       BufferedImage temp;
 
       temp = ImageIO.read(stream);
-      width = (int)temp.getWidth();
-      height = (int)temp.getHeight();
+      width = temp.getWidth();
+      height = temp.getHeight();
 
       canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       createGraphics();
 
       gc.drawImage(temp, 0, 0);
     }
-    catch (Exception e) {
-      System.out.println("Couldn't Load Image Data From Byte Array");
-
-      //System.out.println(e.getMessage());
-      //e.printStackTrace();
+    catch (final Exception e) {
+      Mobile.warn("Couldn't Load Image Data From Byte Array");
     }
 
     platformImage = this;
   }
 
-  public PlatformImage(int[] rgb, int Width, int Height, boolean processAlpha) {
+  public PlatformImage(final int[] rgb, final int Width, final int Height, final boolean processAlpha) {
     // createRGBImage (Data is ARGB pixel data)
     width = Width;
     height = Height;
@@ -171,39 +163,40 @@ public class PlatformImage extends javax.microedition.lcdui.Image {
     platformImage = this;
   }
 
-  public PlatformImage(Image image, int x, int y, int Width, int Height, int transform) {
+  public PlatformImage(final Image image, final int x, final int y, final int Width, final int Height, final int transform) {
     // Create Image From Sub-Image, Transformed //
-    BufferedImage sub = image.platformImage.canvas.getSubimage(x, y, Width, Height);
+    final BufferedImage sub = image.platformImage.canvas.getSubimage(x, y, Width, Height);
 
-    canvas = transformImage(sub, transform);
+    canvas = PlatformImage.transformImage(sub, transform);
     createGraphics();
 
-    width = (int)canvas.getWidth();
-    height = (int)canvas.getHeight();
+    width = canvas.getWidth();
+    height = canvas.getHeight();
 
     platformImage = this;
   }
 
-  public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
+  @Override
+  public void getRGB(final int[] rgbData, final int offset, final int scanlength, final int x, final int y, final int width, final int height) {
     canvas.getRGB(x, y, width, height, rgbData, offset, scanlength);
   }
 
-  public int getARGB(int x, int y) {
+  public int getARGB(final int x, final int y) {
     return canvas.getRGB(x, y);
   }
 
-  public static BufferedImage transformImage(BufferedImage image, int transform) {
-    int width = (int)image.getWidth();
-    int height = (int)image.getHeight();
+  public static BufferedImage transformImage(final BufferedImage image, final int transform) {
+    final int width = image.getWidth();
+    final int height = image.getHeight();
     int out_width = width;
     int out_height = height;
-    AffineTransform af = new AffineTransform();
+    final AffineTransform af = new AffineTransform();
     switch (transform) {
       case Sprite.TRANS_NONE:
         break;
       case Sprite.TRANS_ROT90:
         af.translate(0, width);
-        af.rotate(Math.PI * 3 / 2);
+        af.rotate((Math.PI * 3) / 2);
         out_width = height;
         out_height = width;
         break;
@@ -237,15 +230,15 @@ public class PlatformImage extends javax.microedition.lcdui.Image {
         break;
       case Sprite.TRANS_MIRROR_ROT270:
         af.translate(height, 0);
-        af.rotate(Math.PI * 3 / 2);
+        af.rotate((Math.PI * 3) / 2);
         af.translate(width, 0);
         af.scale(-1, 1);
         out_width = height;
         out_height = width;
         break;
     }
-    BufferedImage transimage = new BufferedImage(out_width, out_height, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D gc = transimage.createGraphics();
+    final BufferedImage transimage = new BufferedImage(out_width, out_height, BufferedImage.TYPE_INT_ARGB);
+    final Graphics2D gc = transimage.createGraphics();
     gc.drawImage(image, af, null);
     return transimage;
   }

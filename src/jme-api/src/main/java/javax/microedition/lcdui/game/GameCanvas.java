@@ -1,21 +1,20 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui.game;
 
-import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import org.recompile.mobile.Mobile;
@@ -33,9 +32,9 @@ public abstract class GameCanvas extends Canvas {
   public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
   public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-  private boolean suppressKeyEvents;
+  private final boolean suppressKeyEvents;
 
-  protected GameCanvas(boolean suppressKeyEvents) {
+  protected GameCanvas(final boolean suppressKeyEvents) {
     this.suppressKeyEvents = suppressKeyEvents;
     width = Mobile.getPlatform().lcdWidth;
     height = Mobile.getPlatform().lcdHeight;
@@ -46,10 +45,11 @@ public abstract class GameCanvas extends Canvas {
     return platformImage.getGraphics();
   }
 
-  public void paint(Graphics g) {
+  @Override
+  public void paint(final Graphics g) {
   }
 
-  public void flushGraphics(int x, int y, int width, int height) {
+  public void flushGraphics(final int x, final int y, final int width, final int height) {
     Mobile.getPlatform().flushGraphics(platformImage, x, y, width, height);
   }
 
@@ -58,8 +58,7 @@ public abstract class GameCanvas extends Canvas {
   }
 
   public int getKeyStates() {
-    // found in use
-    int t = Mobile.getPlatform().keyState;
+    Mobile.getPlatform();
     return 0;
   }
 

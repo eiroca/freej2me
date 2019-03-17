@@ -1,22 +1,22 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
 package org.recompile.mobile;
 
 import java.io.InputStream;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.m3g.Graphics3D;
 
 /*
@@ -65,40 +65,59 @@ public class Mobile {
   public static final int NOKIA_SEND = -10; // KEY_SEND = -10;
 
   public static MobilePlatform getPlatform() {
-    return platform;
+    return Mobile.platform;
   }
 
-  public static void setPlatform(MobilePlatform p) {
-    platform = p;
+  public static void setPlatform(final MobilePlatform p) {
+    Mobile.platform = p;
   }
 
   public static Display getDisplay() {
-    return display;
+    return Mobile.display;
   }
 
-  public static void setDisplay(Display d) {
-    display = d;
+  public static void setDisplay(final Display d) {
+    Mobile.display = d;
   }
 
   public static Graphics3D getGraphics3D() {
-    return graphics3d;
+    return Mobile.graphics3d;
   }
 
-  public static void setGraphics3D(Graphics3D g) {
-    graphics3d = g;
+  public static void setGraphics3D(final Graphics3D g) {
+    Mobile.graphics3d = g;
   }
 
-  public static InputStream getResourceAsStream(Class c, String resource) {
-    return platform.loader.getMIDletResourceAsStream(resource);
+  public static InputStream getResourceAsStream(final Class<?> c, final String resource) {
+    return Mobile.platform.loader.getMIDletResourceAsStream(resource);
   }
 
-  public static InputStream getMIDletResourceAsStream(String resource) {
-    return platform.loader.getMIDletResourceAsStream(resource);
+  public static InputStream getMIDletResourceAsStream(final String resource) {
+    return Mobile.platform.loader.getMIDletResourceAsStream(resource);
   }
 
-  public static void log(String text) {
-    if (!quiet) {
+  public static void debug(final String text) {
+    if (!Mobile.quiet) {
+      // System.out.println(text);
+    }
+  }
+
+  public static void log(final String text) {
+    if (!Mobile.quiet) {
       System.out.println(text);
+    }
+  }
+
+  public static void warn(final String text) {
+    if (!Mobile.quiet) {
+      System.err.println(text);
+    }
+  }
+
+  public static void error(final String text, final Throwable e) {
+    System.err.println(text);
+    if (!Mobile.quiet) {
+      e.printStackTrace();
     }
   }
 

@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -29,14 +29,14 @@ public abstract class Node extends Transformable {
   private boolean rendering = false;
   private int scope;
 
-  public void align(Node reference) {
+  public void align(final Node reference) {
   }
 
-  public Node getAlignmentReference(int axis) {
+  public Node getAlignmentReference(final int axis) {
     return alignRef;
   }
 
-  public int getAlignmentTarget(int axis) {
+  public int getAlignmentTarget(final int axis) {
     return 0;
   }
 
@@ -52,7 +52,7 @@ public abstract class Node extends Transformable {
     return scope;
   }
 
-  public boolean getTransformTo(Node target, Transform transform) {
+  public boolean getTransformTo(final Node target, final Transform transform) {
     return false;
   }
 
@@ -64,22 +64,22 @@ public abstract class Node extends Transformable {
     return rendering;
   }
 
-  public void setAlignment(Node zRef, int zTarget, Node yRef, int yTarget) {
+  public void setAlignment(final Node zRef, final int zTarget, final Node yRef, final int yTarget) {
   }
 
-  public void setAlphaFactor(float value) {
+  public void setAlphaFactor(final float value) {
     alphaFactor = value;
   }
 
-  public void setPickingEnable(boolean enable) {
+  public void setPickingEnable(final boolean enable) {
     picking = enable;
   }
 
-  public void setRenderingEnable(boolean enable) {
+  public void setRenderingEnable(final boolean enable) {
     rendering = enable;
   }
 
-  public void setScope(int value) {
+  public void setScope(final int value) {
     scope = value;
   }
 

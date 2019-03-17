@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
@@ -47,45 +47,43 @@ public abstract class Canvas extends Displayable {
   protected Canvas() {
     width = Mobile.getPlatform().lcdWidth;
     height = Mobile.getPlatform().lcdHeight;
-
-    System.out.println("Create Canvas:" + width + ", " + height);
-
     platformImage = new PlatformImage(width, height);
+    Mobile.log("Create Canvas:" + width + ", " + height);
   }
 
-  public int getGameAction(int keyCode) {
+  public int getGameAction(final int keyCode) {
     switch (keyCode) {
       case Mobile.KEY_NUM2:
-        return UP;
+        return Canvas.UP;
       case Mobile.KEY_NUM8:
-        return DOWN;
+        return Canvas.DOWN;
       case Mobile.KEY_NUM4:
-        return LEFT;
+        return Canvas.LEFT;
       case Mobile.KEY_NUM6:
-        return RIGHT;
+        return Canvas.RIGHT;
       case Mobile.KEY_NUM5:
-        return FIRE;
+        return Canvas.FIRE;
       case Mobile.KEY_NUM1:
-        return GAME_A;
+        return Canvas.GAME_A;
       case Mobile.KEY_NUM3:
-        return GAME_B;
+        return Canvas.GAME_B;
       case Mobile.KEY_NUM7:
-        return GAME_C;
+        return Canvas.GAME_C;
       case Mobile.KEY_NUM9:
-        return GAME_D;
+        return Canvas.GAME_D;
       case Mobile.NOKIA_UP:
-        return UP;
+        return Canvas.UP;
       case Mobile.NOKIA_DOWN:
-        return DOWN;
+        return Canvas.DOWN;
       case Mobile.NOKIA_LEFT:
-        return LEFT;
+        return Canvas.LEFT;
       case Mobile.NOKIA_RIGHT:
-        return RIGHT;
+        return Canvas.RIGHT;
     }
     return 0;
   }
 
-  public int getKeyCode(int gameAction) {
+  public int getKeyCode(final int gameAction) {
     switch (gameAction) {
       //case Mobile.GAME_UP: return Mobile.KEY_NUM2;
       //case Mobile.GAME_DOWN: return Mobile.KEY_NUM8;
@@ -176,6 +174,7 @@ public abstract class Canvas extends Displayable {
     return false;
   }
 
+  @Override
   public void hideNotify() {
   }
 
@@ -183,24 +182,29 @@ public abstract class Canvas extends Displayable {
     return true;
   }
 
-  public void keyPressed(int keyCode) {
+  @Override
+  public void keyPressed(final int keyCode) {
   }
 
-  public void keyReleased(int keyCode) {
+  @Override
+  public void keyReleased(final int keyCode) {
   }
 
-  public void keyRepeated(int keyCode) {
+  public void keyRepeated(final int keyCode) {
   }
 
   protected abstract void paint(Graphics g);
 
-  public void pointerDragged(int x, int y) {
+  @Override
+  public void pointerDragged(final int x, final int y) {
   }
 
-  public void pointerPressed(int x, int y) {
+  @Override
+  public void pointerPressed(final int x, final int y) {
   }
 
-  public void pointerReleased(int x, int y) {
+  @Override
+  public void pointerReleased(final int x, final int y) {
   }
 
   public void repaint() {
@@ -208,13 +212,12 @@ public abstract class Canvas extends Displayable {
       paint(platformImage.getGraphics());
       Mobile.getPlatform().repaint(platformImage, 0, 0, width, height);
     }
-    catch (Exception e) {
-      System.out.print("Canvas repaint(): " + e.getMessage());
-      e.printStackTrace();
+    catch (final Exception e) {
+      Mobile.error("Create Canvas:" + width + ", " + height, e);
     }
   }
 
-  public void repaint(int x, int y, int width, int height) {
+  public void repaint(final int x, final int y, final int width, final int height) {
     paint(platformImage.getGraphics());
     Mobile.getPlatform().repaint(platformImage, x, y, width, height);
   }
@@ -223,8 +226,8 @@ public abstract class Canvas extends Displayable {
     Mobile.getPlatform().repaint(platformImage, 0, 0, width, height);
   }
 
-  public void setFullScreenMode(boolean mode) {
-    //System.out.print("Set Canvas Full Screen Mode ");
+  public void setFullScreenMode(final boolean mode) {
+    Mobile.debug("Set Canvas Full Screen Mode");
     fullScreen = mode;
     if (fullScreen) {
       width = Mobile.getPlatform().lcdWidth;
@@ -232,14 +235,17 @@ public abstract class Canvas extends Displayable {
     }
   }
 
+  @Override
   public void showNotify() {
   }
 
-  protected void sizeChanged(int w, int h) {
+  @Override
+  protected void sizeChanged(final int w, final int h) {
     width = w;
     height = h;
   }
 
+  @Override
   public void notifySetCurrent() {
     repaint();
   }

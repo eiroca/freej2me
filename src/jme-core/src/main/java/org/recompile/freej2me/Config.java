@@ -1,14 +1,14 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
@@ -29,8 +29,12 @@ import java.util.HashMap;
 import javax.microedition.lcdui.Graphics;
 import org.recompile.mobile.Mobile;
 import org.recompile.mobile.PlatformImage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Config {
+
+  private static Logger logger = LoggerFactory.getLogger(Config.class);
 
   public boolean isRunning = false;
 
@@ -39,7 +43,7 @@ public class Config {
   private int width;
   private int height;
 
-  private ArrayList<String[]> menu;
+  private final ArrayList<String[]> menu;
   private int menuid = 0;
   private int itemid = 0;
 
@@ -49,7 +53,7 @@ public class Config {
 
   public Runnable onChange;
 
-  public HashMap<String, String> settings = new HashMap<String, String>(4);
+  public HashMap<String, String> settings = new HashMap<>(4);
 
   public Config() {
     width = Mobile.getPlatform().lcdWidth;
@@ -58,7 +62,7 @@ public class Config {
     lcd = new PlatformImage(width, height);
     gc = lcd.getGraphics();
 
-    menu = new ArrayList<String[]>();
+    menu = new ArrayList<>();
     menu.add(new String[] {
         "Resume Game", "Display Size", "Sound", "Limit FPS", "Nokia", "Rotate", "Exit"
     }); // 0 - Main Menu
@@ -76,34 +80,31 @@ public class Config {
     }); // 4 - nokia
     menu.add(new String[] {
         "On", "Off"
-    }); // 5 - rotate 
+    }); // 5 - rotate
     menu.add(new String[] {
         "Auto", "60 - Fast", "30 - Slow", "15 - Turtle"
     }); // 6 - FPS
 
-    onChange = new Runnable() {
-
-      public void run() {
-        // placeholder
-      }
+    onChange = () -> {
+      // placeholder
     };
   }
 
   public void init() {
-    String appname = Mobile.getPlatform().loader.getSuiteName();
+    final String appname = Mobile.getPlatform().loader.getSuiteName();
     configPath = Mobile.getPlatform().dataPath + "config/" + appname;
     configFile = configPath + "/game.conf";
     // Load Config //
     try {
       Files.createDirectories(Paths.get(configPath));
     }
-    catch (Exception e) {
-      System.out.println("Problem Creating Config Path " + configPath);
-      System.out.println(e.getMessage());
+    catch (final Exception e) {
+      Config.logger.info("Problem Creating Config Path " + configPath);
+      Config.logger.info(e.getMessage());
     }
 
-    try // Check Config File
-    {
+    try {
+      // Check Config File
       file = new File(configFile);
       if (!file.exists()) {
         file.createNewFile();
@@ -116,9 +117,9 @@ public class Config {
         saveConfig();
       }
     }
-    catch (Exception e) {
-      System.out.println("Problem Opening Config " + configFile);
-      System.out.println(e.getMessage());
+    catch (final Exception e) {
+      Config.logger.info("Problem Opening Config " + configFile);
+      Config.logger.info(e.getMessage());
     }
     BufferedReader reader = null;
     try {
@@ -131,7 +132,7 @@ public class Config {
         if (parts.length == 2) {
           parts[0] = parts[0].trim();
           parts[1] = parts[1].trim();
-          if (parts[0] != "" && parts[1] != "") {
+          if ((parts[0] != "") && (parts[1] != "")) {
             settings.put(parts[0], parts[1]);
           }
         }
@@ -155,40 +156,42 @@ public class Config {
         settings.put("fps", "0");
       }
 
-      int w = Integer.parseInt(settings.get("width"));
-      int h = Integer.parseInt(settings.get("height"));
-      if (width != w || height != h) {
+      final int w = Integer.parseInt(settings.get("width"));
+      final int h = Integer.parseInt(settings.get("height"));
+      if ((width != w) || (height != h)) {
         width = w;
         height = h;
         lcd = new PlatformImage(width, height);
         gc = lcd.getGraphics();
       }
     }
-    catch (Exception e) {
-      System.out.println("Problem Reading Config: " + configFile);
-      System.out.println(e.getMessage());
+    catch (final Exception e) {
+      Config.logger.info("Problem Reading Config: " + configFile);
+      Config.logger.info(e.getMessage());
     }
     finally {
-      if (reader != null) try {
-        reader.close();
-      }
-      catch (IOException e) {
+      if (reader != null) {
+        try {
+          reader.close();
+        }
+        catch (final IOException e) {
+        }
       }
     }
   }
 
   private void saveConfig() {
     try {
-      FileOutputStream fout = new FileOutputStream(file);
-      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
-      for (String key : settings.keySet()) {
+      final FileOutputStream fout = new FileOutputStream(file);
+      final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
+      for (final String key : settings.keySet()) {
         writer.write(key + ":" + settings.get(key) + "\n");
       }
       writer.close();
     }
-    catch (Exception e) {
-      System.out.println("Problem Opening Config " + configFile);
-      System.out.println(e.getMessage());
+    catch (final Exception e) {
+      Config.logger.info("Problem Opening Config " + configFile);
+      Config.logger.info(e.getMessage());
     }
   }
 
@@ -203,7 +206,7 @@ public class Config {
     Mobile.getPlatform().painter.run();
   }
 
-  public void keyPressed(int key) {
+  public void keyPressed(final int key) {
     switch (key) {
       case Mobile.KEY_NUM2:
         itemid--;
@@ -238,13 +241,13 @@ public class Config {
     render();
   }
 
-  public void keyReleased(int key) {
+  public void keyReleased(final int key) {
   }
 
-  public void mousePressed(int key) {
+  public void mousePressed(final int key) {
   }
 
-  public void mouseReleased(int key) {
+  public void mouseReleased(final int key) {
   }
 
   public BufferedImage getLCD() {
@@ -286,9 +289,9 @@ public class Config {
       gc.drawString("Back", 3, height - 17, Graphics.LEFT);
     }
 
-    String[] t = menu.get(menuid);
+    final String[] t = menu.get(menuid);
 
-    int ah = (int)((height - 50) / (t.length + 1));
+    int ah = (height - 50) / (t.length + 1);
     if (ah < 15) {
       ah = 15;
     }
@@ -298,10 +301,10 @@ public class Config {
       space = (ah - 15) / 2;
     }
 
-    int max = (int)Math.floor((height - 50) / ah);
-    int page = (int)Math.floor(itemid / max);
-    int start = (int)(max * page);
-    int pages = (int)Math.ceil(t.length / max);
+    final int max = (int)Math.floor((height - 50) / ah);
+    final int page = (int)Math.floor(itemid / max);
+    final int start = max * page;
+    final int pages = (int)Math.ceil(t.length / max);
 
     if (pages >= 1) {
       gc.setColor(0xFFFFFF);
@@ -310,7 +313,7 @@ public class Config {
 
     for (int i = start; (i < (start + max)) & (i < t.length); i++) {
       label = t[i];
-      if (menuid == 0 && i > 1 && i < 7) {
+      if ((menuid == 0) && (i > 1) && (i < 7)) {
         switch (i) {
           case 2:
             label = label + ": " + settings.get("sound");
@@ -372,7 +375,7 @@ public class Config {
         }
         break;
       case 1: // Display Size
-        String[] t = menu.get(1)[itemid].split("x");
+        final String[] t = menu.get(1)[itemid].split("x");
         updateDisplaySize(Integer.parseInt(t[0]), Integer.parseInt(t[1]));
         menuid = 2;
         itemid = 0;
@@ -437,7 +440,7 @@ public class Config {
     render();
   }
 
-  private void updateDisplaySize(int w, int h) {
+  private void updateDisplaySize(final int w, final int h) {
     settings.put("width", "" + w);
     settings.put("height", "" + h);
     saveConfig();
@@ -448,29 +451,29 @@ public class Config {
     gc = lcd.getGraphics();
   }
 
-  private void updateSound(String value) {
-    System.out.println("Config: sound " + value);
+  private void updateSound(final String value) {
+    Config.logger.info("Config: sound " + value);
     settings.put("sound", value);
     saveConfig();
     onChange.run();
   }
 
-  private void updateNokia(String value) {
-    System.out.println("Config: nokia " + value);
+  private void updateNokia(final String value) {
+    Config.logger.info("Config: nokia " + value);
     settings.put("nokia", value);
     saveConfig();
     onChange.run();
   }
 
-  private void updateRotate(String value) {
-    System.out.println("Config: rotate " + value);
+  private void updateRotate(final String value) {
+    Config.logger.info("Config: rotate " + value);
     settings.put("rotate", value);
     saveConfig();
     onChange.run();
   }
 
-  private void updateFPS(String value) {
-    System.out.println("Config: fps " + value);
+  private void updateFPS(final String value) {
+    Config.logger.info("Config: fps " + value);
     settings.put("fps", value);
     saveConfig();
     onChange.run();

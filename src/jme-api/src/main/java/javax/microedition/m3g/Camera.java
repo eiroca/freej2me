@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -24,21 +24,21 @@ public class Camera extends Node {
   public Camera() {
   }
 
-  public int getProjection(float[] params) {
-    return PERSPECTIVE;
+  public int getProjection(final float[] params) {
+    return Camera.PERSPECTIVE;
   }
 
-  public int getProjection(Transform transform) {
-    return PERSPECTIVE;
+  public int getProjection(final Transform transform) {
+    return Camera.PERSPECTIVE;
   }
 
-  public void setGeneric(Transform transform) {
+  public void setGeneric(final Transform transform) {
   }
 
-  public void setParallel(float fovy, float aspectRatio, float near, float far) {
+  public void setParallel(final float fovy, final float aspectRatio, final float near, final float far) {
   }
 
-  public void setPerspective(float fovy, float aspectRatio, float near, float far) {
+  public void setPerspective(final float fovy, final float aspectRatio, final float near, final float far) {
   }
 
 }

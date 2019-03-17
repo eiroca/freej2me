@@ -1,27 +1,24 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
-import javax.microedition.lcdui.Alert;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.midlet.MIDlet;
-import javax.microedition.lcdui.Image;
-import java.util.Vector;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
+import javax.microedition.midlet.MIDlet;
 import org.recompile.mobile.Mobile;
 
 public class Display {
@@ -42,44 +39,45 @@ public class Display {
 
   public Vector<Runnable> serialCalls;
 
-  private Timer timer;
+  private final Timer timer;
 
-  private SerialCallTimerTask timertask;
+  private final SerialCallTimerTask timertask;
 
   public Display() {
-    display = this;
+    Display.display = this;
 
     Mobile.setDisplay(this);
 
-    serialCalls = new Vector<Runnable>(16);
+    serialCalls = new Vector<>(16);
     timer = new Timer();
     timertask = new SerialCallTimerTask();
     timer.schedule(timertask, 0, 17);
   }
 
-  public void callSerially(Runnable r) {
+  public void callSerially(final Runnable r) {
     serialCalls.add(r);
   }
 
   private class SerialCallTimerTask extends TimerTask {
 
+    @Override
     public void run() {
       if (!serialCalls.isEmpty()) {
         try {
           serialCalls.get(0).run();
           serialCalls.removeElement(0);
         }
-        catch (Exception e) {
+        catch (final Exception e) {
         }
       }
     }
   }
 
-  public boolean flashBacklight(int duration) {
+  public boolean flashBacklight(final int duration) {
     return true;
   }
 
-  public int getBestImageHeight(int imageType) {
+  public int getBestImageHeight(final int imageType) {
     switch (imageType) {
       case LIST_ELEMENT:
         return Mobile.getPlatform().lcdHeight / 8;
@@ -91,15 +89,15 @@ public class Display {
     return Mobile.getPlatform().lcdHeight;
   }
 
-  public int getBestImageWidth(int imageType) {
+  public int getBestImageWidth(final int imageType) {
     return Mobile.getPlatform().lcdWidth;
   }
 
-  public int getBorderStyle(boolean highlighted) {
+  public int getBorderStyle(final boolean highlighted) {
     return 0;
   }
 
-  public int getColor(int colorSpecifier) {
+  public int getColor(final int colorSpecifier) {
     switch (colorSpecifier) {
       case COLOR_BACKGROUND:
         return 0;
@@ -121,8 +119,8 @@ public class Display {
     return current;
   }
 
-  public static Display getDisplay(MIDlet m) {
-    return display;
+  public static Display getDisplay(final MIDlet m) {
+    return Display.display;
   }
 
   public boolean isColor() {
@@ -137,37 +135,35 @@ public class Display {
     return 16777216;
   }
 
-  public void setCurrent(Displayable next) {
+  public void setCurrent(final Displayable next) {
     try {
       next.showNotify();
       current = next;
       current.notifySetCurrent();
       Mobile.getPlatform().flushGraphics(current.platformImage, 0, 0, current.width, current.height);
-      //System.out.println("Set Current "+current.width+", "+current.height);
+      Mobile.debug("Set Current " + current.width + ", " + current.height);
     }
-    catch (Exception e) {
-      System.out.println("Problem with setCurrent(next)");
-      e.printStackTrace();
+    catch (final Exception e) {
+      Mobile.error("Problem with setCurrent(next)", e);
     }
   }
 
-  public void setCurrent(Alert alert, Displayable next) {
+  public void setCurrent(final Alert alert, final Displayable next) {
     try {
       setCurrent(alert);
       alert.setNextScreen(next);
     }
-    catch (Exception e) {
-      System.out.println("Problem with setCurrent(alert, next)");
-      e.printStackTrace();
+    catch (final Exception e) {
+      Mobile.error("Problem with setCurrent(alert, next)", e);
     }
   }
 
-  public void setCurrentItem(Item item) {
-    System.out.println("Display.setCurrentItem");
+  public void setCurrentItem(final Item item) {
+    Mobile.log("Display.setCurrentItem");
   }
 
-  public boolean vibrate(int duration) {
-    //System.out.println("Vibrate");
+  public boolean vibrate(final int duration) {
+    Mobile.debug("Vibrate");
     return true;
   }
 

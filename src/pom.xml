@@ -12,6 +12,7 @@
 	</organization>
 	<properties>
 		<jdk.version>1.8</jdk.version>
+		<slf4j.version>1.7.25</slf4j.version>
 	</properties>
 	<build>
 		<finalName>${project.artifactId}-${project.version}</finalName>
@@ -97,7 +98,7 @@
 		<module>jme-core</module>
 		<module>jme-embedded</module>
 		<module>jme-emulator</module>
-		<!--<module>jme-emu-javafx</module>-->
+		<!--<module>jme-emu-javafx</module> -->
 		<module>jme-emu-libretro</module>
 		<module>jme-emu-retropie</module>
 	</modules>

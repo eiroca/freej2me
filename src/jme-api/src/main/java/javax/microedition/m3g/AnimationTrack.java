@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -40,10 +40,10 @@ public class AnimationTrack extends Object3D {
   public static final int VISIBILITY = 276;
 
   private AnimationController controller;
-  private KeyframeSequence sequence;
-  private int property;
+  private final KeyframeSequence sequence;
+  private final int property;
 
-  public AnimationTrack(KeyframeSequence seq, int prop) {
+  public AnimationTrack(final KeyframeSequence seq, final int prop) {
     sequence = seq;
     property = prop;
   }
@@ -60,7 +60,7 @@ public class AnimationTrack extends Object3D {
     return property;
   }
 
-  public void setController(AnimationController ac) {
+  public void setController(final AnimationController ac) {
     controller = ac;
   }
 

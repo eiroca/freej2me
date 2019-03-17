@@ -1,23 +1,22 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package com.siemens.mp.game;
 
-import org.recompile.mobile.Mobile;
-import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 
 public class Sprite {
 
@@ -33,15 +32,15 @@ public class Sprite {
   public int x;
   public int y;
 
-  public Sprite(byte[] pixels, int pixel_offset, int width, int height, byte[] mask, int mask_offset, int numFrames) {
+  public Sprite(final byte[] pixels, final int pixel_offset, final int width, final int height, final byte[] mask, final int mask_offset, final int numFrames) {
     x = collx = y = colly = 0;
   }
 
-  public Sprite(ExtendedImage pixels, ExtendedImage mask, int numFrames) {
+  public Sprite(final ExtendedImage pixels, final ExtendedImage mask, final int numFrames) {
     x = collx = y = colly = 0;
   }
 
-  public Sprite(Image pixels, Image mask, int numFrames) {
+  public Sprite(final Image pixels, final Image mask, final int numFrames) {
     x = collx = y = colly = 0;
   }
 
@@ -57,32 +56,32 @@ public class Sprite {
     return y;
   }
 
-  public boolean isCollidingWith(Sprite other) {
-    return ((other.x + collx > x + collx + collw) || (other.x + other.collx + other.collw < x + collx) ||
-        (other.y + colly > y + colly + collh) || (other.y + other.colly + other.collh < y + colly));
+  public boolean isCollidingWith(final Sprite other) {
+    return (((other.x + collx) > (x + collx + collw)) || ((other.x + other.collx + other.collw) < (x + collx)) ||
+        ((other.y + colly) > (y + colly + collh)) || ((other.y + other.colly + other.collh) < (y + colly)));
   }
 
-  public boolean isCollidingWithPos(int xpos, int ypos) {
-    return (xpos >= x + collx && xpos <= x + collx + collw && ypos >= y + colly && ypos <= y + colly + collh);
+  public boolean isCollidingWithPos(final int xpos, final int ypos) {
+    return ((xpos >= (x + collx)) && (xpos <= (x + collx + collw)) && (ypos >= (y + colly)) && (ypos <= (y + colly + collh)));
   }
 
-  public void setCollisionRectangle(int x, int y, int width, int height) {
+  public void setCollisionRectangle(final int x, final int y, final int width, final int height) {
     collx = x;
     colly = y;
     collw = width;
     collh = height;
   }
 
-  public void setFrame(int framenumber) {
+  public void setFrame(final int framenumber) {
     frame = framenumber;
   }
 
-  public void setPosition(int X, int Y) {
+  public void setPosition(final int X, final int Y) {
     x = X;
     y = Y;
   }
 
-  protected void paint(Graphics g) {
+  protected void paint(final Graphics g) {
   }
 
 }

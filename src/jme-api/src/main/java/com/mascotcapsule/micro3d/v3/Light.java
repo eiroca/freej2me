@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package com.mascotcapsule.micro3d.v3;
 
@@ -26,7 +26,7 @@ public class Light {
   public Light() {
   }
 
-  public Light(Vector3D Dir, int DirIntensity, int AmbIntensity) {
+  public Light(final Vector3D Dir, final int DirIntensity, final int AmbIntensity) {
     dir = Dir;
     dirIntensity = DirIntensity;
     ambIntensity = AmbIntensity;
@@ -40,11 +40,11 @@ public class Light {
     return parIntensity;
   }
 
-  public final void setDirIntensity(int value) {
+  public final void setDirIntensity(final int value) {
     dirIntensity = value;
   }
 
-  public final void setParallelLightIntensity(int value) {
+  public final void setParallelLightIntensity(final int value) {
     parIntensity = value;
   }
 
@@ -56,11 +56,11 @@ public class Light {
     return ambIntensity;
   }
 
-  public final void setAmbIntensity(int value) {
+  public final void setAmbIntensity(final int value) {
     ambIntensity = value;
   }
 
-  public final void setAmbientIntensity(int value) {
+  public final void setAmbientIntensity(final int value) {
     ambIntensity = value;
   }
 
@@ -72,13 +72,13 @@ public class Light {
     return parDir;
   }
 
-  public final void setDirection(Vector3D v) {
+  public final void setDirection(final Vector3D v) {
     dir.x = v.x;
     dir.y = v.y;
     dir.z = v.z;
   }
 
-  public final void setParallelLightDirection(Vector3D v) {
+  public final void setParallelLightDirection(final Vector3D v) {
     parDir.x = v.x;
     parDir.y = v.y;
     parDir.z = v.z;

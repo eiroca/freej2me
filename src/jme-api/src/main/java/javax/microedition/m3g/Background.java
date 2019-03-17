@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.m3g;
 
@@ -75,30 +75,30 @@ public class Background extends Object3D {
     return depthclear;
   }
 
-  public void setColor(int ARGB) {
+  public void setColor(final int ARGB) {
     color = ARGB;
   }
 
-  public void setColorClearEnable(boolean enable) {
+  public void setColorClearEnable(final boolean enable) {
     colorclear = enable;
   }
 
-  public void setCrop(int cropX, int cropY, int width, int height) {
+  public void setCrop(final int cropX, final int cropY, final int width, final int height) {
     cropx = cropX;
     cropy = cropY;
     cropw = width;
     croph = height;
   }
 
-  public void setDepthClearEnable(boolean enable) {
+  public void setDepthClearEnable(final boolean enable) {
     depthclear = enable;
   }
 
-  public void setImage(Image2D img) {
+  public void setImage(final Image2D img) {
     image = img;
   }
 
-  public void setImageMode(int modeX, int modeY) {
+  public void setImageMode(final int modeX, final int modeY) {
     modex = modeX;
     modey = modeY;
   }

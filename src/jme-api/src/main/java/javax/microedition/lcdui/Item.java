@@ -1,17 +1,17 @@
 /**
  * This file is part of FreeJ2ME.
- * 
+ *
  * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
- * 
+ *
  */
 package javax.microedition.lcdui;
 
@@ -58,7 +58,7 @@ public abstract class Item {
 
   private int prefHeight = 16;
 
-  public void addCommand(Command cmd) {
+  public void addCommand(final Command cmd) {
     commands.add(cmd);
   }
 
@@ -89,27 +89,27 @@ public abstract class Item {
   public void notifyStateChanged() {
   }
 
-  public void removeCommand(Command cmd) {
+  public void removeCommand(final Command cmd) {
     commands.remove(cmd);
   }
 
-  public void setDefaultCommand(Command cmd) {
+  public void setDefaultCommand(final Command cmd) {
     defaultCommand = cmd;
   }
 
-  public void setItemCommandListener(ItemCommandListener listener) {
+  public void setItemCommandListener(final ItemCommandListener listener) {
     commandListener = listener;
   }
 
-  public void setLabel(String text) {
+  public void setLabel(final String text) {
     label = text;
   }
 
-  public void setLayout(int value) {
+  public void setLayout(final int value) {
     layout = value;
   }
 
-  public void setPreferredSize(int width, int height) {
+  public void setPreferredSize(final int width, final int height) {
     prefWidth = width;
     prefHeight = height;
   }
