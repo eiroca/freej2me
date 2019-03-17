@@ -1,9 +1,10 @@
 # freej2me
-A free J2ME emulator with libretro, awt, sdl2 and javafx frontends.
+A free J2ME emulator with libretro, awt and sdl2 frontends.
 
 Authors :
 - David Richardson [Recompile@retropie]
 - Saket Dandawate  [Hex@retropie]
+- Enrico Croce  [https://github.com/eiroca]
 
 ---
 
@@ -16,6 +17,7 @@ Discussion/Support thread:
 
 Development thread:
   https://retropie.org.uk/forum/topic/11441/would-you-like-to-play-nokia-j2me-games-on-retropie/
+
 
 ----
 **How to contribute as a developer:**
