@@ -30,15 +30,12 @@
 -->
 <body>
 
-<p>
-Provides a framework for static code analysis based on the asm.tree package.
-</p>
+	<p>Provides a framework for static code analysis based on the
+		asm.tree package.</p>
 
-<p>
-Basic usage:
-</p>
+	<p>Basic usage:</p>
 
-<pre>
+	<pre>
 ClassReader cr = new ClassReader(bytecode);
 ClassNode cn = new ClassNode();
 cr.accept(cn, ClassReader.SKIP_DEBUG);
@@ -59,9 +56,7 @@ for (int i = 0; i < methods.size(); ++i) {
 }   
 </pre>
 
-<p>
-@since ASM 1.4.3
-</p>
+	<p>@since ASM 1.4.3</p>
 
 </body>
 </html>

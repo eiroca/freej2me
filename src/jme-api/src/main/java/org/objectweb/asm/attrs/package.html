@@ -29,20 +29,20 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <body>
-Provides an implementation for optional class, field and method attributes.
+	Provides an implementation for optional class, field and method
+	attributes.
 
-<p>
-
-By default ASM strips optional attributes, in order to keep them in
-the bytecode that is being readed you should pass an array of required attribute
-instances to {@link org.objectweb.asm.ClassReader#accept(org.objectweb.asm.ClassVisitor, org.objectweb.asm.Attribute[], boolean) ClassReader.accept()} method.
-In order to add custom attributes to the manually constructed bytecode concrete
-subclasses of the {@link org.objectweb.asm.Attribute Attribute} can be passed to 
-the visitAttribute methods of the 
-{@link org.objectweb.asm.ClassVisitor ClassVisitor}, 
-{@link org.objectweb.asm.FieldVisitor FieldVisitor} and
-{@link org.objectweb.asm.MethodVisitor MethodVisitor} interfaces.
-
-@since ASM 1.4.1
+	<p>By default ASM strips optional attributes, in order to keep them
+		in the bytecode that is being readed you should pass an array of
+		required attribute instances to {@link
+		org.objectweb.asm.ClassReader#accept(org.objectweb.asm.ClassVisitor,
+		org.objectweb.asm.Attribute[], boolean) ClassReader.accept()} method.
+		In order to add custom attributes to the manually constructed bytecode
+		concrete subclasses of the {@link org.objectweb.asm.Attribute
+		Attribute} can be passed to the visitAttribute methods of the {@link
+		org.objectweb.asm.ClassVisitor ClassVisitor}, {@link
+		org.objectweb.asm.FieldVisitor FieldVisitor} and {@link
+		org.objectweb.asm.MethodVisitor MethodVisitor} interfaces. @since ASM
+		1.4.1
 </body>
 </html>

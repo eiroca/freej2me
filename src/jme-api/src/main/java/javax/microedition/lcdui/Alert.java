@@ -1,133 +1,133 @@
-/*
-	This file is part of FreeJ2ME.
-
-	FreeJ2ME is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	FreeJ2ME is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with FreeJ2ME.  If not, see http://www.gnu.org/licenses/
-*/
+/**
+ * This file is part of FreeJ2ME.
+ * 
+ * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
+ * see http://www.gnu.org/licenses/
+ * 
+ */
 package javax.microedition.lcdui;
 
 import java.util.ArrayList;
-
 import org.recompile.mobile.Mobile;
 
+public class Alert extends Screen {
 
-public class Alert extends Screen
-{
+  public static final Command DISMISS_COMMAND = new Command("OK", Command.OK, 0);
+  public static final int FOREVER = -2;
 
-	public static final Command DISMISS_COMMAND = new Command("OK", Command.OK, 0);
+  private String message;
+  private Image image;
+  private AlertType type;
+  private int timeout = FOREVER;
+  private Gauge indicator;
+  private Displayable nextScreen = null;
 
-	public static final int FOREVER = -2;
+  public Alert(String title) {
+    System.out.println("Alert: " + title);
+    setTitle(title);
+    Thread.dumpStack();
+  }
 
+  public Alert(String title, String alertText, Image alertImage, AlertType alertType) {
+    System.out.println("Alert: " + title);
+    System.out.println("Alert: " + alertText);
 
-	private String message;
+    setTitle(title);
+    setString(alertText);
+    setImage(alertImage);
+    setType(alertType);
 
-	private Image image;
+    setTimeout(getDefaultTimeout());
 
-	private AlertType type;
+    addCommand(Alert.DISMISS_COMMAND);
 
-	private int timeout = FOREVER;
+    setCommandListener(defaultListener);
+  }
 
-	private Gauge indicator;
+  public int getDefaultTimeout() {
+    return Alert.FOREVER;
+  }
 
-	private Displayable nextScreen = null;
+  public int getTimeout() {
+    return timeout;
+  }
 
+  public void setTimeout(int time) {
+    timeout = time;
+  }
 
-	public Alert(String title)
-	{
-		System.out.println("Alert: " + title);
-		setTitle(title);
-		Thread.dumpStack();
-	}
+  public AlertType getType() {
+    return type;
+  }
 
-	public Alert(String title, String alertText, Image alertImage, AlertType alertType)
-	{
-		System.out.println("Alert: " + title);
-		System.out.println("Alert: " + alertText);
+  public void setType(AlertType t) {
+    type = t;
+  }
 
-		setTitle(title);
-		setString(alertText);
-		setImage(alertImage);
-		setType(alertType);
+  public String getString() {
+    return message;
+  }
 
-		setTimeout(getDefaultTimeout());
+  public void setString(String text) {
+    System.out.println(text);
+    message = text;
+  }
 
-		addCommand(Alert.DISMISS_COMMAND);
+  public Image getImage() {
+    return image;
+  }
 
-		setCommandListener(defaultListener);
-	}
+  public void setImage(Image img) {
+    image = img;
+  }
 
-	public int getDefaultTimeout() { return Alert.FOREVER; }
+  public void setIndicator(Gauge gauge) {
+    indicator = gauge;
+  }
 
-	public int getTimeout() { return timeout; }
+  public Gauge getIndicator() {
+    return indicator;
+  }
 
-	public void setTimeout(int time) { timeout = time; }
+  public void addCommand(Command cmd) {
+    super.addCommand(cmd);
 
-	public AlertType getType() { return type; }
+    if (getCommands().size() == 2) {
+      super.removeCommand(Alert.DISMISS_COMMAND);
+    }
 
-	public void setType(AlertType t) { type = t; }
+  }
 
-	public String getString() { return message; }
+  public void removeCommand(Command cmd) {
+    if (getCommands().size() > 1) {
+      super.removeCommand(cmd);
+    }
+  }
 
-	public void setString(String text)
-	{
-		System.out.println(text);
-		message = text;
-	}
+  public void setCommandListener(CommandListener listener) {
+    if (listener == null) {
+      listener = defaultListener;
+    }
+    super.setCommandListener(listener);
+  }
 
-	public Image getImage() { return image; }
+  public CommandListener defaultListener = new CommandListener() {
 
-	public void setImage(Image img) { image = img; }
+    public void commandAction(Command cmd, Displayable next) {
+      Mobile.getDisplay().setCurrent(next);
+    }
+  };
 
-	public void setIndicator(Gauge gauge) { indicator = gauge; }
-
-	public Gauge getIndicator() { return indicator; }
-
-	public void addCommand(Command cmd)
-	{
-		super.addCommand(cmd);
-
-		if (getCommands().size() == 2)
-		{
-			super.removeCommand(Alert.DISMISS_COMMAND);
-		}
-
-	}
-
-	public void removeCommand(Command cmd)
-	{
-		if (getCommands().size() > 1)
-		{
-			super.removeCommand(cmd);
-		}
-	}
-
-	public void setCommandListener(CommandListener listener)
-	{
-		if (listener == null)
-		{
-			listener = defaultListener;
-		}
-		super.setCommandListener(listener);
-	}
-
-	public CommandListener defaultListener = new CommandListener()
-	{
-		public void commandAction(Command cmd, Displayable next)
-		{
-			Mobile.getDisplay().setCurrent(next);
-		}
-	};
-
-	public void setNextScreen(Displayable next) { nextScreen = next; }
+  public void setNextScreen(Displayable next) {
+    nextScreen = next;
+  }
 
 }

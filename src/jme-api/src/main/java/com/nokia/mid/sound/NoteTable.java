@@ -1,21 +1,34 @@
+/**
+ * This file is part of FreeJ2ME.
+ * 
+ * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
+ * see http://www.gnu.org/licenses/
+ * 
+ */
 package com.nokia.mid.sound;
 
 import java.util.Hashtable;
 
-class NoteTable
-{
+class NoteTable {
+
   public static final int MAX_TONES = 41;
   private Hashtable<Integer, Integer> data;
   private int[] liste;
   private final Sound t;
-  
-  public NoteTable(Sound t)
-  {  
+
+  public NoteTable(Sound t) {
     this.t = t;
     this.data = new Hashtable<Integer, Integer>(MAX_TONES);
     this.liste = new int[MAX_TONES];
-    
-    
+
     this.data.put(new Integer(0), new Integer(0));
     this.data.put(new Integer(1), new Integer(0));
     this.data.put(new Integer(440), new Integer(1));
@@ -57,8 +70,6 @@ class NoteTable
     this.data.put(new Integer(3520), new Integer(37));
     this.data.put(new Integer(3729), new Integer(38));
     this.data.put(new Integer(3951), new Integer(39));
-    
-
 
     this.liste[0] = 0;
     this.liste[1] = 1;
@@ -102,26 +113,21 @@ class NoteTable
     this.liste[39] = 3729;
     this.liste[40] = 3951;
   }
-  
-  int get(int note)
-  {
+
+  int get(int note) {
     Integer key = new Integer(note);
     Integer n = (Integer)this.data.get(key);
-    if (n == null) {
-      return -1;
-    }
+    if (n == null) { return -1; }
     return n.intValue();
   }
-  
-  int listeVal(int k)
-  {
-    if(k < MAX_TONES)
-    {
-        return liste[k];
+
+  int listeVal(int k) {
+    if (k < MAX_TONES) {
+      return liste[k];
     }
-    else
-    {
-        return -1;
+    else {
+      return -1;
     }
   }
+
 }

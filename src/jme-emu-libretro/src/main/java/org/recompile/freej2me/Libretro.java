@@ -1,422 +1,461 @@
-/*
-	This file is part of FreeJ2ME.
-
-	FreeJ2ME is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	FreeJ2ME is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with FreeJ2ME.  If not, see http://www.gnu.org/licenses/
-*/
+/**
+ * This file is part of FreeJ2ME.
+ * 
+ * FreeJ2ME is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * FreeJ2ME is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
+ * see http://www.gnu.org/licenses/
+ */
 package org.recompile.freej2me;
 
-import org.recompile.mobile.*;
-
-import java.awt.Image;
-import java.awt.Canvas;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
+import org.recompile.mobile.Mobile;
+import org.recompile.mobile.MobilePlatform;
 
-public class Libretro
-{
-	private int lcdWidth;
-	private int lcdHeight;
+public class Libretro {
 
-	private Runnable painter;
+  private int lcdWidth;
+  private int lcdHeight;
 
-	private BufferedImage surface;
-	private Graphics2D gc;
+  private Runnable painter;
 
-	private Config config;
-	private boolean useNokiaControls = true;
-	private boolean rotateDisplay = false;
-	private int limitFPS = 0;
+  private BufferedImage surface;
+  private Graphics2D gc;
 
-	private byte[] frameBuffer = new byte[800*800*3];
-	private byte[] frameHeader = new byte[]{(byte)0xFE, 0, 0, 0, 0, 0};
+  private Config config;
+  private boolean useNokiaControls = true;
+  private boolean rotateDisplay = false;
+  private int limitFPS = 0;
 
-	private int mousex;
-	private int mousey;
+  private byte[] frameBuffer = new byte[800 * 800 * 3];
+  private byte[] frameHeader = new byte[] {
+      (byte)0xFE, 0, 0, 0, 0, 0
+  };
 
-	LibretroIO lio;
+  private int mousex;
+  private int mousey;
 
-	public static void main(String args[])
-	{
-		Libretro app = new Libretro();
-	}
+  LibretroIO lio;
 
-	public Libretro()
-	{
-		lcdWidth = 240;
-		lcdHeight = 320;
+  public static void main(String args[]) {
+    Libretro app = new Libretro();
+  }
 
-		surface = new BufferedImage(lcdWidth, lcdHeight, BufferedImage.TYPE_INT_ARGB); // libretro display
-		gc = (Graphics2D)surface.getGraphics();
+  public Libretro() {
+    lcdWidth = 240;
+    lcdHeight = 320;
 
-		Mobile.setPlatform(new MobilePlatform(lcdWidth, lcdHeight));
+    surface = new BufferedImage(lcdWidth, lcdHeight, BufferedImage.TYPE_INT_ARGB); // libretro display
+    gc = (Graphics2D)surface.getGraphics();
 
-		config = new Config();
-		config.onChange = new Runnable() { public void run() { settingsChanged(); } };
+    Mobile.setPlatform(new MobilePlatform(lcdWidth, lcdHeight));
 
-		lio = new LibretroIO();
+    config = new Config();
+    config.onChange = new Runnable() {
 
-		lio.start();
+      public void run() {
+        settingsChanged();
+      }
+    };
 
-		painter = new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					gc.drawImage(Mobile.getPlatform().getLCD(), 0, 0, lcdWidth, lcdHeight, null);
-				}
-				catch (Exception e) { }
-			}
-		};
+    lio = new LibretroIO();
 
-		Mobile.getPlatform().setPainter(painter);
+    lio.start();
 
-		System.out.println("+READY");
-		System.out.flush();
-	}
+    painter = new Runnable() {
 
-	private class LibretroIO
-	{
-		private Timer keytimer;
-		private TimerTask keytask;
+      public void run() {
+        try {
+          gc.drawImage(Mobile.getPlatform().getLCD(), 0, 0, lcdWidth, lcdHeight, null);
+        }
+        catch (Exception e) {
+        }
+      }
+    };
 
-		public void start()
-		{
-			keytimer = new Timer();
-			keytask = new LibretroTimerTask();
-			keytimer.schedule(keytask, 0, 1);
-		}
+    Mobile.getPlatform().setPainter(painter);
 
-		public void stop()
-		{
-			keytimer.cancel();
-		}
+    System.out.println("+READY");
+    System.out.flush();
+  }
 
-		private class LibretroTimerTask extends TimerTask
-		{
-			private int bin;
-			private int[] din = new int[5];
-			private int count = 0;
-			private int code;
-			private StringBuilder path;
-			private URL url;
+  private class LibretroIO {
 
-			public void run()
-			{
-				try // to read keys
-				{
-					while(true)
-					{
-						bin = System.in.read();
-						if(bin==-1) { return; }
-						//System.out.print(" "+bin);
-						din[count] = (int)(bin & 0xFF);
-						count++;
-						if (count==5)
-						{
-							count = 0;
-							code = (din[1]<<24) | (din[2]<<16) | (din[3]<<8) | din[4];
-							switch(din[0])
-							{
-								case 0: keyUp(getMobileKey(code)); break;
+    private Timer keytimer;
+    private TimerTask keytask;
 
-								case 1:	keyDown(getMobileKey(code)); break;
+    public void start() {
+      keytimer = new Timer();
+      keytask = new LibretroTimerTask();
+      keytimer.schedule(keytask, 0, 1);
+    }
 
-								case 2:	keyUp(getMobileKeyJoy(code)); break;
+    public void stop() {
+      keytimer.cancel();
+    }
 
-								case 3: keyDown(getMobileKeyJoy(code)); break;
+    private class LibretroTimerTask extends TimerTask {
 
-								case 4: // mouse up
-									mousex = (din[1]<<8) | din[2];
-									mousey = (din[3]<<8) | din[4];
-									if(!rotateDisplay)
-									{
-										Mobile.getPlatform().pointerReleased(mousex, mousey);
-									}
-									else
-									{
-										Mobile.getPlatform().pointerReleased(mousey, mousex);
-									}
-								break;
+      private int bin;
+      private int[] din = new int[5];
+      private int count = 0;
+      private int code;
+      private StringBuilder path;
+      private URL url;
 
-								case 5: // mouse down
-									mousex = (din[1]<<8) | din[2];
-									mousey = (din[3]<<8) | din[4];
-									if(!rotateDisplay)
-									{
-										Mobile.getPlatform().pointerPressed(mousex, mousey);
-									}
-									else
-									{
-										Mobile.getPlatform().pointerPressed(mousey, mousex);
-									}
-								break;
+      public void run() {
+        try // to read keys
+        {
+          while (true) {
+            bin = System.in.read();
+            if (bin == -1) { return; }
+            //System.out.print(" "+bin);
+            din[count] = (int)(bin & 0xFF);
+            count++;
+            if (count == 5) {
+              count = 0;
+              code = (din[1] << 24) | (din[2] << 16) | (din[3] << 8) | din[4];
+              switch (din[0]) {
+                case 0:
+                  keyUp(getMobileKey(code));
+                  break;
 
-								case 6: // mouse drag
-									mousex = (din[1]<<8) | din[2];
-									mousey = (din[3]<<8) | din[4];
-									if(!rotateDisplay)
-									{
-										Mobile.getPlatform().pointerDragged(mousex, mousey);
-									}
-									else
-									{
-										Mobile.getPlatform().pointerDragged(mousey, mousex);
-									}
-								break;
+                case 1:
+                  keyDown(getMobileKey(code));
+                  break;
 
-								case 10: // load jar
-									path = new StringBuilder();
-									for(int i=0; i<code; i++)
-									{
-										bin = System.in.read();
-										path.append((char)bin);
-									}
-									url = (new File(path.toString())).toURI().toURL();
-									if(Mobile.getPlatform().loadJar(url.toString()))
-									{
-										// Check config
-										config.init();
-										settingsChanged();
+                case 2:
+                  keyUp(getMobileKeyJoy(code));
+                  break;
 
-										// Run jar
-										Mobile.getPlatform().runJar();
-									}
-									else
-									{
-										System.out.println("Couldn't load jar...");
-										System.exit(0);
-									}
-								break;
+                case 3:
+                  keyDown(getMobileKeyJoy(code));
+                  break;
 
-								case 11: // set save path //
-									path = new StringBuilder();
-									for(int i=0; i<code; i++)
-									{
-										bin = System.in.read();
-										path.append((char)bin);
-									}
-									Mobile.getPlatform().dataPath = path.toString();
-								break;
+                case 4: // mouse up
+                  mousex = (din[1] << 8) | din[2];
+                  mousey = (din[3] << 8) | din[4];
+                  if (!rotateDisplay) {
+                    Mobile.getPlatform().pointerReleased(mousex, mousey);
+                  }
+                  else {
+                    Mobile.getPlatform().pointerReleased(mousey, mousex);
+                  }
+                  break;
 
-								case 15:
-									// Send Frame Libretro //
-									try
-									{
-										int[] data;
-										if(config.isRunning)
-										{
-											data = config.getLCD().getRGB(0, 0, lcdWidth, lcdHeight, null, 0, lcdWidth);
-										}
-										else
-										{
-											data = surface.getRGB(0, 0, lcdWidth, lcdHeight, null, 0, lcdWidth);
-											if(limitFPS>0)
-											{
-												Thread.sleep(limitFPS);
-											}
-										}
-										int bufferLength = data.length*3;
-										int cb = 0;
-										for(int i=0; i<data.length; i++)
-										{
-											frameBuffer[cb]   = (byte)((data[i]>>16)&0xFF);
-											frameBuffer[cb+1] = (byte)((data[i]>>8)&0xFF);
-											frameBuffer[cb+2] = (byte)((data[i])&0xFF);
-											cb+=3;
-										}
-										//frameHeader[0] = (byte)0xFE;
-										frameHeader[1] = (byte)((lcdWidth>>8)&0xFF);
-										frameHeader[2] = (byte)((lcdWidth)&0xFF);
-										frameHeader[3] = (byte)((lcdHeight>>8)&0xFF);
-										frameHeader[4] = (byte)((lcdHeight)&0xFF);
-										//frameHeader[5] = rotate - set from config
-										System.out.write(frameHeader, 0, 6);
-										System.out.write(frameBuffer, 0, bufferLength);
-										System.out.flush();
-									}
-									catch (Exception e)
-									{
-										System.out.print("Error sending frame: "+e.getMessage());
-										System.exit(0);
-									}
+                case 5: // mouse down
+                  mousex = (din[1] << 8) | din[2];
+                  mousey = (din[3] << 8) | din[4];
+                  if (!rotateDisplay) {
+                    Mobile.getPlatform().pointerPressed(mousex, mousey);
+                  }
+                  else {
+                    Mobile.getPlatform().pointerPressed(mousey, mousex);
+                  }
+                  break;
 
-								break;
-							}
-							//System.out.println(" ("+code+") <- Key");
-							//System.out.flush();
-						}
-					}
-				}
-				catch (Exception e) { System.exit(0); }
-			}
-		} // timer
-	} // LibretroIO
+                case 6: // mouse drag
+                  mousex = (din[1] << 8) | din[2];
+                  mousey = (din[3] << 8) | din[4];
+                  if (!rotateDisplay) {
+                    Mobile.getPlatform().pointerDragged(mousex, mousey);
+                  }
+                  else {
+                    Mobile.getPlatform().pointerDragged(mousey, mousex);
+                  }
+                  break;
 
-	private void settingsChanged()
-	{
-		int w = Integer.parseInt(config.settings.get("width"));
-		int h = Integer.parseInt(config.settings.get("height"));
+                case 10: // load jar
+                  path = new StringBuilder();
+                  for (int i = 0; i < code; i++) {
+                    bin = System.in.read();
+                    path.append((char)bin);
+                  }
+                  url = (new File(path.toString())).toURI().toURL();
+                  if (Mobile.getPlatform().loadJar(url.toString())) {
+                    // Check config
+                    config.init();
+                    settingsChanged();
 
-		limitFPS = Integer.parseInt(config.settings.get("fps"));
-		if(limitFPS>0) { limitFPS = 1000 / limitFPS; }
+                    // Run jar
+                    Mobile.getPlatform().runJar();
+                  }
+                  else {
+                    System.out.println("Couldn't load jar...");
+                    System.exit(0);
+                  }
+                  break;
 
-		String sound = config.settings.get("sound");
-		if(sound.equals("on")) { Mobile.getPlatform().sound = true; }
-		if(sound.equals("off")) { Mobile.getPlatform().sound = false; }
+                case 11: // set save path //
+                  path = new StringBuilder();
+                  for (int i = 0; i < code; i++) {
+                    bin = System.in.read();
+                    path.append((char)bin);
+                  }
+                  Mobile.getPlatform().dataPath = path.toString();
+                  break;
 
-		String nokia = config.settings.get("nokia");
-		if(nokia.equals("on")) { useNokiaControls = true; }
-		if(nokia.equals("off")) { useNokiaControls = false; }
+                case 15:
+                  // Send Frame Libretro //
+                  try {
+                    int[] data;
+                    if (config.isRunning) {
+                      data = config.getLCD().getRGB(0, 0, lcdWidth, lcdHeight, null, 0, lcdWidth);
+                    }
+                    else {
+                      data = surface.getRGB(0, 0, lcdWidth, lcdHeight, null, 0, lcdWidth);
+                      if (limitFPS > 0) {
+                        Thread.sleep(limitFPS);
+                      }
+                    }
+                    int bufferLength = data.length * 3;
+                    int cb = 0;
+                    for (int i = 0; i < data.length; i++) {
+                      frameBuffer[cb] = (byte)((data[i] >> 16) & 0xFF);
+                      frameBuffer[cb + 1] = (byte)((data[i] >> 8) & 0xFF);
+                      frameBuffer[cb + 2] = (byte)((data[i]) & 0xFF);
+                      cb += 3;
+                    }
+                    //frameHeader[0] = (byte)0xFE;
+                    frameHeader[1] = (byte)((lcdWidth >> 8) & 0xFF);
+                    frameHeader[2] = (byte)((lcdWidth) & 0xFF);
+                    frameHeader[3] = (byte)((lcdHeight >> 8) & 0xFF);
+                    frameHeader[4] = (byte)((lcdHeight) & 0xFF);
+                    //frameHeader[5] = rotate - set from config
+                    System.out.write(frameHeader, 0, 6);
+                    System.out.write(frameBuffer, 0, bufferLength);
+                    System.out.flush();
+                  }
+                  catch (Exception e) {
+                    System.out.print("Error sending frame: " + e.getMessage());
+                    System.exit(0);
+                  }
 
-		String rotate = config.settings.get("rotate");
-		if(rotate.equals("on")) { rotateDisplay = true; frameHeader[5] = (byte)1; }
-		if(rotate.equals("off")) { rotateDisplay = false; frameHeader[5] = (byte)0; }
+                  break;
+              }
+              //System.out.println(" ("+code+") <- Key");
+              //System.out.flush();
+            }
+          }
+        }
+        catch (Exception e) {
+          System.exit(0);
+        }
+      }
+    } // timer
+  } // LibretroIO
 
+  private void settingsChanged() {
+    int w = Integer.parseInt(config.settings.get("width"));
+    int h = Integer.parseInt(config.settings.get("height"));
 
-		if(lcdWidth != w || lcdHeight != h)
-		{
-			lcdWidth = w;
-			lcdHeight = h;
-			Mobile.getPlatform().resizeLCD(w, h);
-			surface = new BufferedImage(lcdWidth, lcdHeight, BufferedImage.TYPE_INT_ARGB); // libretro display
-			gc = (Graphics2D)surface.getGraphics();
-		}
-	}
+    limitFPS = Integer.parseInt(config.settings.get("fps"));
+    if (limitFPS > 0) {
+      limitFPS = 1000 / limitFPS;
+    }
 
-	private void keyDown(int key)
-	{
-		if(config.isRunning)
-		{
-			config.keyPressed(key);
-		}
-		else
-		{
-			Mobile.getPlatform().keyPressed(key);
-		}
-	}
+    String sound = config.settings.get("sound");
+    if (sound.equals("on")) {
+      Mobile.getPlatform().sound = true;
+    }
+    if (sound.equals("off")) {
+      Mobile.getPlatform().sound = false;
+    }
 
-	private void keyUp(int key)
-	{
-		if(!config.isRunning)
-		{
-			Mobile.getPlatform().keyReleased(key);
-		}
-	}
+    String nokia = config.settings.get("nokia");
+    if (nokia.equals("on")) {
+      useNokiaControls = true;
+    }
+    if (nokia.equals("off")) {
+      useNokiaControls = false;
+    }
 
-	private int getMobileKey(int keycode)
-	{
-		if(useNokiaControls)
-		{
-			switch(keycode)
-			{
-				case 273: return Mobile.NOKIA_UP; // Up
-				case 274: return Mobile.NOKIA_DOWN; // Down
-				case 276: return Mobile.NOKIA_LEFT; // Left
-				case 275: return Mobile.NOKIA_RIGHT; // Right
-			}
-		}
-		switch(keycode)
-		{
-			case 48: return Mobile.KEY_NUM0;
-			case 49: return Mobile.KEY_NUM1;
-			case 50: return Mobile.KEY_NUM2;
-			case 51: return Mobile.KEY_NUM3;
-			case 52: return Mobile.KEY_NUM4;
-			case 53: return Mobile.KEY_NUM5;
-			case 54: return Mobile.KEY_NUM6;
-			case 55: return Mobile.KEY_NUM7;
-			case 56: return Mobile.KEY_NUM8;
-			case 57: return Mobile.KEY_NUM9;
-			case 42: return Mobile.KEY_STAR;
-			case 35: return Mobile.KEY_POUND;
+    String rotate = config.settings.get("rotate");
+    if (rotate.equals("on")) {
+      rotateDisplay = true;
+      frameHeader[5] = (byte)1;
+    }
+    if (rotate.equals("off")) {
+      rotateDisplay = false;
+      frameHeader[5] = (byte)0;
+    }
 
-			// Arrow U,D,L,R
-			case 273: return Mobile.KEY_NUM2;
-			case 274: return Mobile.KEY_NUM8;
-			case 276: return Mobile.KEY_NUM4;
-			case 275: return Mobile.KEY_NUM6;
+    if (lcdWidth != w || lcdHeight != h) {
+      lcdWidth = w;
+      lcdHeight = h;
+      Mobile.getPlatform().resizeLCD(w, h);
+      surface = new BufferedImage(lcdWidth, lcdHeight, BufferedImage.TYPE_INT_ARGB); // libretro display
+      gc = (Graphics2D)surface.getGraphics();
+    }
+  }
 
-			// Inverted Numpad
-			case 256: return Mobile.KEY_NUM0;
-			case 257: return Mobile.KEY_NUM7;
-			case 258: return Mobile.KEY_NUM8;
-			case 259: return Mobile.KEY_NUM9;
-			case 260: return Mobile.KEY_NUM4;
-			case 261: return Mobile.KEY_NUM5;
-			case 262: return Mobile.KEY_NUM6;
-			case 263: return Mobile.KEY_NUM1;
-			case 264: return Mobile.KEY_NUM2;
-			case 265: return Mobile.KEY_NUM3;
+  private void keyDown(int key) {
+    if (config.isRunning) {
+      config.keyPressed(key);
+    }
+    else {
+      Mobile.getPlatform().keyPressed(key);
+    }
+  }
 
-			// Enter
-			case 13: return Mobile.KEY_NUM5;
+  private void keyUp(int key) {
+    if (!config.isRunning) {
+      Mobile.getPlatform().keyReleased(key);
+    }
+  }
 
-			case 113: return Mobile.NOKIA_SOFT1; // q
-			case 119: return Mobile.NOKIA_SOFT2; // w
-			case 101: return Mobile.KEY_STAR;  // e
-			case 114: return Mobile.KEY_POUND; // r
+  private int getMobileKey(int keycode) {
+    if (useNokiaControls) {
+      switch (keycode) {
+        case 273:
+          return Mobile.NOKIA_UP; // Up
+        case 274:
+          return Mobile.NOKIA_DOWN; // Down
+        case 276:
+          return Mobile.NOKIA_LEFT; // Left
+        case 275:
+          return Mobile.NOKIA_RIGHT; // Right
+      }
+    }
+    switch (keycode) {
+      case 48:
+        return Mobile.KEY_NUM0;
+      case 49:
+        return Mobile.KEY_NUM1;
+      case 50:
+        return Mobile.KEY_NUM2;
+      case 51:
+        return Mobile.KEY_NUM3;
+      case 52:
+        return Mobile.KEY_NUM4;
+      case 53:
+        return Mobile.KEY_NUM5;
+      case 54:
+        return Mobile.KEY_NUM6;
+      case 55:
+        return Mobile.KEY_NUM7;
+      case 56:
+        return Mobile.KEY_NUM8;
+      case 57:
+        return Mobile.KEY_NUM9;
+      case 42:
+        return Mobile.KEY_STAR;
+      case 35:
+        return Mobile.KEY_POUND;
 
-			case 91: return Mobile.NOKIA_SOFT1; // [
-			case 93: return Mobile.NOKIA_SOFT2; // ]
+      // Arrow U,D,L,R
+      case 273:
+        return Mobile.KEY_NUM2;
+      case 274:
+        return Mobile.KEY_NUM8;
+      case 276:
+        return Mobile.KEY_NUM4;
+      case 275:
+        return Mobile.KEY_NUM6;
 
-			// ESC - Config Menu
-			case 27: config.start();
+      // Inverted Numpad
+      case 256:
+        return Mobile.KEY_NUM0;
+      case 257:
+        return Mobile.KEY_NUM7;
+      case 258:
+        return Mobile.KEY_NUM8;
+      case 259:
+        return Mobile.KEY_NUM9;
+      case 260:
+        return Mobile.KEY_NUM4;
+      case 261:
+        return Mobile.KEY_NUM5;
+      case 262:
+        return Mobile.KEY_NUM6;
+      case 263:
+        return Mobile.KEY_NUM1;
+      case 264:
+        return Mobile.KEY_NUM2;
+      case 265:
+        return Mobile.KEY_NUM3;
 
-		}
-		return keycode;
-	}
+      // Enter
+      case 13:
+        return Mobile.KEY_NUM5;
 
-	private int getMobileKeyJoy(int keycode)
-	{
-		if(useNokiaControls)
-		{
-			switch(keycode)
-			{
-				case 0: return Mobile.NOKIA_UP; // Up
-				case 1: return Mobile.NOKIA_DOWN; // Down
-				case 2: return Mobile.NOKIA_LEFT; // Left
-				case 3: return Mobile.NOKIA_RIGHT; // Right
-			}
-		}
-		switch(keycode)
-		{
-			case 0: return Mobile.KEY_NUM2; // Up
-			case 1: return Mobile.KEY_NUM8; // Down
-			case 2: return Mobile.KEY_NUM4; // Left
-			case 3: return Mobile.KEY_NUM6; // Right
-			case 4: return Mobile.KEY_NUM9; // A
-			case 5: return Mobile.KEY_NUM7; // B
-			case 6: return Mobile.KEY_NUM0; // X
-			case 7: return Mobile.KEY_NUM5; // Y
-			case 8: return Mobile.NOKIA_SOFT2; // Start
-			case 9: return Mobile.NOKIA_SOFT1; // Select
-			case 10: return Mobile.KEY_NUM1; // L
-			case 11: return Mobile.KEY_NUM3; // R
-			case 12: return Mobile.KEY_STAR; // L2
-			case 13: return Mobile.KEY_POUND; // R2
-		}
-		return Mobile.KEY_NUM5;
-	}
+      case 113:
+        return Mobile.NOKIA_SOFT1; // q
+      case 119:
+        return Mobile.NOKIA_SOFT2; // w
+      case 101:
+        return Mobile.KEY_STAR; // e
+      case 114:
+        return Mobile.KEY_POUND; // r
+
+      case 91:
+        return Mobile.NOKIA_SOFT1; // [
+      case 93:
+        return Mobile.NOKIA_SOFT2; // ]
+
+      // ESC - Config Menu
+      case 27:
+        config.start();
+
+    }
+    return keycode;
+  }
+
+  private int getMobileKeyJoy(int keycode) {
+    if (useNokiaControls) {
+      switch (keycode) {
+        case 0:
+          return Mobile.NOKIA_UP; // Up
+        case 1:
+          return Mobile.NOKIA_DOWN; // Down
+        case 2:
+          return Mobile.NOKIA_LEFT; // Left
+        case 3:
+          return Mobile.NOKIA_RIGHT; // Right
+      }
+    }
+    switch (keycode) {
+      case 0:
+        return Mobile.KEY_NUM2; // Up
+      case 1:
+        return Mobile.KEY_NUM8; // Down
+      case 2:
+        return Mobile.KEY_NUM4; // Left
+      case 3:
+        return Mobile.KEY_NUM6; // Right
+      case 4:
+        return Mobile.KEY_NUM9; // A
+      case 5:
+        return Mobile.KEY_NUM7; // B
+      case 6:
+        return Mobile.KEY_NUM0; // X
+      case 7:
+        return Mobile.KEY_NUM5; // Y
+      case 8:
+        return Mobile.NOKIA_SOFT2; // Start
+      case 9:
+        return Mobile.NOKIA_SOFT1; // Select
+      case 10:
+        return Mobile.KEY_NUM1; // L
+      case 11:
+        return Mobile.KEY_NUM3; // R
+      case 12:
+        return Mobile.KEY_STAR; // L2
+      case 13:
+        return Mobile.KEY_POUND; // R2
+    }
+    return Mobile.KEY_NUM5;
+  }
+
 }

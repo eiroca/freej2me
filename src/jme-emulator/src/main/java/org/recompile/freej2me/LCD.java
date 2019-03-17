@@ -12,28 +12,23 @@
  * You should have received a copy of the GNU General Public License along with FreeJ2ME. If not,
  * see http://www.gnu.org/licenses/
  */
-package net.eiroca.j2me.host.freej2me;
+package org.recompile.freej2me;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import org.recompile.mobile.Mobile;
 
 public class LCD extends Canvas {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = -959791062723408787L;
-  /**
-   *
-   */
-  private final FreeeJ2meHost j2meHost;
+  private static final long serialVersionUID = 6527317485663850138L;
+  private final FreeJ2ME freeJ2ME;
 
   /**
-   * @param j2meHost
+   * @param freeJ2ME
    */
-  LCD(final FreeeJ2meHost j2meHost) {
-    this.j2meHost = j2meHost;
+  public LCD(FreeJ2ME freeJ2ME) {
+    this.freeJ2ME = freeJ2ME;
   }
 
   public int cx = 0;
@@ -44,30 +39,29 @@ public class LCD extends Canvas {
   public double scalex = 1;
   public double scaley = 1;
 
-  public void updateScale(final int vw, final int vh) {
-    cx = (getWidth() - vw) / 2;
-    cy = (getHeight() - vh) / 2;
+  public void updateScale(int vw, int vh) {
+    cx = (this.getWidth() - vw) / 2;
+    cy = (this.getHeight() - vh) / 2;
     cw = vw;
     ch = vh;
-    scalex = (double)j2meHost.lcdWidth / (double)vw;
-    scaley = (double)j2meHost.lcdHeight / (double)vh;
+    scalex = (double)this.freeJ2ME.lcdWidth / (double)vw;
+    scaley = (double)this.freeJ2ME.lcdHeight / (double)vh;
   }
 
-  @Override
-  public void paint(final Graphics g) {
+  public void paint(Graphics g) {
     try {
-      getGraphics();
-      if (j2meHost.config.isRunning) {
-        g.drawImage(j2meHost.config.getLCD(), cx, cy, cw, ch, null);
+      Graphics2D cgc = (Graphics2D)this.getGraphics();
+      if (this.freeJ2ME.config.isRunning) {
+        g.drawImage(this.freeJ2ME.config.getLCD(), cx, cy, cw, ch, null);
       }
       else {
         g.drawImage(Mobile.getPlatform().getLCD(), cx, cy, cw, ch, null);
-        if (j2meHost.limitFPS > 0) {
-          Thread.sleep(j2meHost.limitFPS);
+        if (this.freeJ2ME.limitFPS > 0) {
+          Thread.sleep(this.freeJ2ME.limitFPS);
         }
       }
     }
-    catch (final Exception e) {
+    catch (Exception e) {
       System.out.println(e.getMessage());
     }
   }
