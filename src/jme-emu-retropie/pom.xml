@@ -11,6 +11,11 @@
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>net.eiroca</groupId>
 			<artifactId>jme-api</artifactId>
 			<version>${project.version}</version>

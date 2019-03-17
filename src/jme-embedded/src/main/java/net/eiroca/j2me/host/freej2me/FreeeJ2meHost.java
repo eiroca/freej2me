@@ -24,9 +24,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.recompile.freej2me.Config;
+import org.recompile.freej2me.ILCDOwner;
+import org.recompile.freej2me.LCD;
 /*
  * FreeJ2ME - AWT
  */
@@ -35,7 +38,7 @@ import org.recompile.mobile.MobilePlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FreeeJ2meHost implements KeyListener, MouseListener {
+public class FreeeJ2meHost implements KeyListener, MouseListener, ILCDOwner {
 
   private static Logger logger = LoggerFactory.getLogger(FreeeJ2meHost.class);
 
@@ -317,4 +320,31 @@ public class FreeeJ2meHost implements KeyListener, MouseListener {
   @Override
   public void mouseClicked(final MouseEvent e) {
   }
+
+  @Override
+  public double getLCDHeight() {
+
+    return lcdHeight;
+  }
+
+  @Override
+  public double getLCDWidth() {
+    return lcdWidth;
+  }
+
+  @Override
+  public boolean isRunning() {
+    return config.isRunning;
+  }
+
+  @Override
+  public BufferedImage getLCD() {
+    return config.getLCD();
+  }
+
+  @Override
+  public int getLimitFPS() {
+    return limitFPS;
+  }
+
 }

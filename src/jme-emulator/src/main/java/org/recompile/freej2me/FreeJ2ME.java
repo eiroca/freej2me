@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import org.recompile.mobile.Mobile;
@@ -32,7 +33,7 @@ import org.recompile.mobile.MobilePlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FreeJ2ME {
+public class FreeJ2ME implements ILCDOwner {
 
   private static Logger logger = LoggerFactory.getLogger(FreeJ2ME.class);
 
@@ -40,11 +41,11 @@ public class FreeJ2ME {
     new FreeJ2ME(args);
   }
 
-  private Frame main;
+  private final Frame main;
   int lcdWidth;
   int lcdHeight;
 
-  private LCD lcd;
+  private final LCD lcd;
 
   private int xborder;
   private int yborder;
@@ -331,6 +332,32 @@ public class FreeJ2ME {
       nw = nh * ((double)lcdWidth / (double)lcdHeight);
     }
     lcd.updateScale((int)nw, (int)nh);
+  }
+
+  @Override
+  public double getLCDHeight() {
+
+    return lcdHeight;
+  }
+
+  @Override
+  public double getLCDWidth() {
+    return lcdWidth;
+  }
+
+  @Override
+  public boolean isRunning() {
+    return config.isRunning;
+  }
+
+  @Override
+  public BufferedImage getLCD() {
+    return config.getLCD();
+  }
+
+  @Override
+  public int getLimitFPS() {
+    return limitFPS;
   }
 
 }

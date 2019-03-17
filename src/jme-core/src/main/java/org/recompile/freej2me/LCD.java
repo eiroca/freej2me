@@ -24,7 +24,8 @@ public class LCD extends Canvas {
 
   private static Logger logger = LoggerFactory.getLogger(LCD.class);
   private static final long serialVersionUID = 6527317485663850138L;
-  private final FreeJ2ME freeJ2ME;
+
+  private final ILCDOwner freeJ2ME;
 
   public int cx = 0;
   public int cy = 0;
@@ -37,7 +38,7 @@ public class LCD extends Canvas {
   /**
    * @param freeJ2ME
    */
-  public LCD(final FreeJ2ME freeJ2ME) {
+  public LCD(final ILCDOwner freeJ2ME) {
     this.freeJ2ME = freeJ2ME;
   }
 
@@ -46,20 +47,20 @@ public class LCD extends Canvas {
     cy = (getHeight() - vh) / 2;
     cw = vw;
     ch = vh;
-    scalex = (double)freeJ2ME.lcdWidth / (double)vw;
-    scaley = (double)freeJ2ME.lcdHeight / (double)vh;
+    scalex = (double)freeJ2ME.getLCDWidth() / (double)vw;
+    scaley = (double)freeJ2ME.getLCDHeight() / (double)vh;
   }
 
   @Override
   public void paint(final Graphics g) {
     try {
-      if (freeJ2ME.config.isRunning) {
-        g.drawImage(freeJ2ME.config.getLCD(), cx, cy, cw, ch, null);
+      if (freeJ2ME.isRunning()) {
+        g.drawImage(freeJ2ME.getLCD(), cx, cy, cw, ch, null);
       }
       else {
         g.drawImage(Mobile.getPlatform().getLCD(), cx, cy, cw, ch, null);
-        if (freeJ2ME.limitFPS > 0) {
-          Thread.sleep(freeJ2ME.limitFPS);
+        if (freeJ2ME.getLimitFPS() > 0) {
+          Thread.sleep(freeJ2ME.getLimitFPS());
         }
       }
     }
