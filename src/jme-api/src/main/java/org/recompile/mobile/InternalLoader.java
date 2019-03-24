@@ -146,12 +146,8 @@ public class InternalLoader extends ClassLoader implements MIDletLoader {
   @Override
   public InputStream getResourceAsStream(String resource) {
     Mobile.debug("Loading Resource: " + resource);
-    URL url;
-    if (resource.startsWith("/")) {
-      resource = resource.substring(1);
-    }
+    URL url = getResource(resource);
     try {
-      url = findResource(resource);
       return url.openStream();
     }
     catch (final Exception e) {
@@ -166,7 +162,10 @@ public class InternalLoader extends ClassLoader implements MIDletLoader {
       resource = resource.substring(1);
     }
     try {
-      final URL url = findResource(resource);
+      URL url = findResource(resource);
+      if (url == null) {
+        url = findResource("/" + resource);
+      }
       return url;
     }
     catch (final Exception e) {
@@ -189,7 +188,6 @@ public class InternalLoader extends ClassLoader implements MIDletLoader {
     // Read all bytes, return ByteArrayInputStream //
     try {
       final InputStream stream = url.openStream();
-
       final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       int count = 0;
       final byte[] data = new byte[4096];

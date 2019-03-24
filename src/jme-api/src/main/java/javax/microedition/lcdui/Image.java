@@ -15,6 +15,7 @@
  */
 package javax.microedition.lcdui;
 
+import java.io.IOException;
 import java.io.InputStream;
 import org.recompile.mobile.Mobile;
 import org.recompile.mobile.PlatformImage;
@@ -51,7 +52,7 @@ public class Image {
     return new PlatformImage(width, height);
   }
 
-  public static Image createImage(final String name) {
+  public static Image createImage(final String name) throws IOException {
     Mobile.debug("Create Image " + name);
     return new PlatformImage(name);
   }

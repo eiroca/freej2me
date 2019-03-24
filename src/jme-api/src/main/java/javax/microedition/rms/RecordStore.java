@@ -188,7 +188,7 @@ public class RecordStore {
     listeners.add(listener);
   }
 
-  public void closeRecordStore() {
+  public void closeRecordStore() throws RecordStoreException {
   }
 
   public void deleteRecord(final int recordId) {
