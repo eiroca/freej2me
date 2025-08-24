@@ -4,3 +4,6 @@ build/
 src/sdl2/sdl_interface
 config/
 **/rms/*
+
+**/.classpath
+**/.project
